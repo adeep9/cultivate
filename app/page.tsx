@@ -3,7 +3,6 @@
 
 import React from "react";
 import { HeroHighlight } from "./components/ui/hero-highlight"; // Adjust the import path as necessary
-import { Button } from "./components/ui/button"; // 
 import Signup from "./components/sign-up";
 
 const Page = () => {
