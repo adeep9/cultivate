@@ -7,7 +7,7 @@ const Signup = () => {
   return (
     <main className="relative z-20 h-[400px] w-[400px] bg-neutral-100 border-2 border-blue-600 rounded-[20px] p-6 shadow-lg">
       <h1 className="text-4xl font-bold mb-6 tracking-tight text-blue-600">Sign Up</h1>
-      <form className="space-y-4">
+      <form action="/survey" className="space-y-4">
 
         {/* Phone Number Input Field */}
         <div>
@@ -62,7 +62,7 @@ const Signup = () => {
 
         {/* Submit Button */}
         <button
-          type="submit"
+          type="submit" 
           className="w-full mt-4 py-2 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors"
         >
           Join Us
