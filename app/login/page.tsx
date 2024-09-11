@@ -14,7 +14,7 @@ const LoginPage = () => {
         <div>
           <Link href="/" passHref> 
             <Button variant="outline" size="sm" asChild>
-              <span>return</span>
+              <b><span>Sign in?</span></b>
             </Button>
           </Link>
         </div>

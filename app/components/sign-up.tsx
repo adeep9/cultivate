@@ -1,13 +1,57 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Input } from "../components/ui/input"; // Adjust the import path as necessary
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    email: '',
+    phone: '',
+    password: '',
+    userType: 'restaurant' // Assuming default userType
+  });
+  const [error, setError] = useState(''); // Single error state
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const validate = () => {
+    if (!formData.email || !formData.phone || !formData.password) {
+      return 'All fields must be filled';
+    }
+    if (formData.phone.length < 8 || formData.phone.length > 14) {
+      return 'All fields must be valid';
+    }
+    return ''; // No errors
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    // Store data in session storage
+    sessionStorage.setItem('signupData', JSON.stringify(formData));
+    
+    // Redirect to survey page
+    router.push('/survey');
+  };
+
   return (
     <main className="relative z-20 h-[400px] w-[400px] bg-neutral-100 border-2 border-blue-600 rounded-[20px] p-6 shadow-lg">
       <h1 className="text-4xl font-bold mb-6 tracking-tight text-blue-600">Sign Up</h1>
-      <form action="/survey" className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
 
         {/* Phone Number Input Field */}
         <div>
@@ -20,7 +64,10 @@ const Signup = () => {
           <Input
             type="tel"
             id="phone"
+            name="phone" // Added name attribute
             placeholder="Enter your phone number"
+            value={formData.phone} // Controlled input value
+            onChange={handleChange} // Update state on change
             className="w-full"
           />
         </div>
@@ -36,14 +83,13 @@ const Signup = () => {
           <Input
             type="email"
             id="email"
+            name="email" // Added name attribute
             placeholder="Enter your email"
+            value={formData.email} // Controlled input value
+            onChange={handleChange} // Update state on change
             className="w-full"
           />
         </div>
-
-        {/* Divider Line */}
-        <hr className="border-t border-gray-300 my-4" />
-
         {/* Password Input Field */}
         <div>
           <label
@@ -55,15 +101,25 @@ const Signup = () => {
           <Input
             type="password"
             id="password"
+            name="password" // Added name attribute
             placeholder="Enter your password"
+            value={formData.password} // Controlled input value
+            onChange={handleChange} // Update state on change
             className="w-full"
           />
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <p className="text-red-600 text-xs mt-1 text-center">
+            {error}
+          </p>
+        )}
+
         {/* Submit Button */}
         <button
           type="submit" 
-          className="w-full mt-4 py-2 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors"
+          className="w-full py-1 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors"
         >
           Join Us
         </button>
@@ -73,7 +129,4 @@ const Signup = () => {
 };
 
 export default Signup;
-
-
-
 
