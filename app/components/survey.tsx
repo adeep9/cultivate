@@ -7,7 +7,7 @@ const SurveyForm = () => {
   // State to keep track of the current step
   const [step, setStep] = useState(1);
 
-  // State for form data
+  // Empty State for form data
   const [formData, setFormData] = useState({
     userType: "",
     restaurantName: "",
@@ -29,44 +29,121 @@ const SurveyForm = () => {
     if (e.target.files) {
       const file = e.target.files[0];
       console.log("Uploaded file:", file); // You can handle file upload logic here
+      submitCSVData(file); // Call the function to submit the CSV file
     }
   };
 
   // Handle next step
   const handleNext = () => {
+    // When moving to the next step, check if it's the last step and submit the data
+    if (step === 2 && formData.userType === "restaurant") {
+      submitRestaurantData();
+    } else if (step === 2 && formData.userType === "supplier") {
+      submitSupplierData();
+    }
     setStep(step + 1);
+  };
+
+  // Function to submit restaurant data
+  const submitRestaurantData = async () => {
+    try {
+      const response = await fetch("/api/submitRestaurant", {  // Replace with your backend endpoint, this is where the information will go
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          restaurantName: formData.restaurantName,
+          restaurantAddress: formData.restaurantAddress,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Restaurant data submitted successfully.");
+      } else {
+        console.error("Failed to submit restaurant data.");
+      }
+    } catch (error) {
+      console.error("Error submitting restaurant data:", error);
+    }
+  };
+
+  // Function to submit supplier data
+  const submitSupplierData = async () => {
+    try {
+      const response = await fetch("/api/submitSupplier", {  // Replace with your backend endpoint, this is where the information will go
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          supplierName: formData.supplierName,
+          supplierAddress: formData.supplierAddress,
+        }),
+      });
+
+      if (response.ok) {
+        console.log("Supplier data submitted successfully.");
+      } else {
+        console.error("Failed to submit supplier data.");
+      }
+    } catch (error) {
+      console.error("Error submitting supplier data:", error);
+    }
+  };
+
+  // Function to submit CSV data
+  const submitCSVData = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const response = await fetch("/api/submitCSV", {  // Replace with your backend endpoint, this is where the information will go
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        console.log("CSV file submitted successfully.");
+      } else {
+        console.error("Failed to submit CSV file.");
+      }
+    } catch (error) {
+      console.error("Error submitting CSV file:", error);
+    }
   };
 
   // Conditionally render form steps
   return (
-      <div>
-        {step === 1 && (
-          <div className="space-y-8 fade-in">
-            <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">Are you a restaurant or a supplier?</p>
-            <div className="flex space-x-6">
-
-              <button
-                className="btn-custom-r"
-                onClick={() => {
-                  setFormData({ ...formData, userType: "restaurant" });
-                  handleNext();
-                }}
-              >
-                Restaurant
-              </button>
-              <button
-                className="btn-custom-s"
-                onClick={() => {
-                  setFormData({ ...formData, userType: "supplier" });
-                  handleNext();
-                }}
-              >
-                Supplier
-              </button>
-
-            </div>
+    //Ask the user if they are a resteraunt or a supplier, to esnure what type of user this is. 
+    <div>
+      {step === 1 && (
+        <div className="space-y-8 fade-in">
+          <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
+            Are you a restaurant or a supplier?
+          </p>
+          <div className="flex space-x-6">
+            <button
+              className="btn-custom-r"
+              onClick={() => {
+                setFormData({ ...formData, userType: "restaurant" });
+                handleNext();
+              }}
+            >
+              Restaurant
+            </button>
+            <button
+              className="btn-custom-s"
+              onClick={() => {
+                setFormData({ ...formData, userType: "supplier" });
+                handleNext();
+              }}
+            >
+              Supplier
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
       {step === 2 && formData.userType === "restaurant" && (
         <div className="space-y-8 animate-fade-in">
@@ -75,54 +152,55 @@ const SurveyForm = () => {
           </p>
 
           <div className="flex flex-col space-y-4">
+            <div>
+              <label
+                htmlFor="restaurantName"
+                className="block text-left text-sm font-medium text-gray-700 mb-1"
+              >
+                Restaurant Name
+              </label>
+              <input
+                type="text"
+                id="restaurantName"
+                name="restaurantName"
+                placeholder="Restaurant Name"
+                value={formData.restaurantName}
+                onChange={handleChange}
+                className="p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
 
-        <div>
-          <label
-            htmlFor="restaurantName"
-            className="block text-left text-sm font-medium text-gray-700 mb-1"
+            {/* Restaurant Address Input */}
+            <div>
+              <label
+                htmlFor="restaurantAddress"
+                className="block text-left text-sm font-medium text-gray-700 mb-1"
+              >
+                Restaurant Address
+              </label>
+              <input
+                type="text"
+                id="restaurantAddress"
+                name="restaurantAddress"
+                placeholder="Restaurant Address"
+                value={formData.restaurantAddress}
+                onChange={handleChange}
+                className="p-2 border border-gray-300 rounded-md w-full"
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={handleNext}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
           >
-            Restaurant Name
-          </label>
-          <input
-            type="text"
-            id="restaurantName"
-            name="restaurantName"
-            placeholder="Restaurant Name"
-            value={formData.restaurantName}
-            onChange={handleChange}
-            className="p-2 border border-gray-300 rounded-md w-full" // Example Tailwind styles for input
-          />
-        </div>
-
-        {/* Restaurant Address Input */}
-        <div>
-          <label
-            htmlFor="restaurantAddress"
-            className="block text-left text-sm font-medium text-gray-700 mb-1"
-          >
-            Restaurant Address
-          </label>
-          <input
-            type="text"
-            id="restaurantAddress"
-            name="restaurantAddress"
-            placeholder="Restaurant Address"
-            value={formData.restaurantAddress}
-            onChange={handleChange}
-            className="p-2 border border-gray-300 rounded-md w-full" // Example Tailwind styles for input
-          />
-        </div>
-      </div>
-
-
-          <button onClick={handleNext} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
             Next
           </button>
         </div>
       )}
 
       {step === 2 && formData.userType === "supplier" && (
-        <div className="space-y-6 animate-fade-in"> {/* Matching container styling */}
+        <div className="space-y-6 animate-fade-in">
           <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
             Just one more step...
           </p>
@@ -175,15 +253,14 @@ const SurveyForm = () => {
         </div>
       )}
 
-
       {step === 3 && formData.userType === "restaurant" && (
-        <div className="space-y-4 animate-fade-in"> {/* Container with vertical spacing */}
+        <div className="space-y-4 animate-fade-in">
           <p className="pb-2 text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
             Upload and submit a CSV file
           </p>
-          
+
           {/* File Upload Input */}
-          <div className="flex flex-col items-start space-y-4"> {/* Flex column for vertical layout */}
+          <div className="flex flex-col items-start space-y-4">
             <input
               type="file"
               accept=".csv"
@@ -201,10 +278,9 @@ const SurveyForm = () => {
           </div>
         </div>
       )}
-
-
     </div>
   );
 };
 
 export default SurveyForm;
+
