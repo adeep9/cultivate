@@ -44,6 +44,7 @@ const SurveyForm = () => {
           <div className="space-y-8 fade-in">
             <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">Are you a restaurant or a supplier?</p>
             <div className="flex space-x-6">
+
               <button
                 className="btn-custom-r"
                 onClick={() => {
@@ -62,28 +63,61 @@ const SurveyForm = () => {
               >
                 Supplier
               </button>
+
             </div>
           </div>
         )}
 
       {step === 2 && formData.userType === "restaurant" && (
+        <div className="space-y-8 animate-fade-in">
+          <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
+            A few more questions...
+          </p>
+
+          <div className="flex flex-col space-y-4">
+
         <div>
-          <p>What is your Restaurant name and Address?</p>
+          <label
+            htmlFor="restaurantName"
+            className="block text-left text-sm font-medium text-gray-700 mb-1"
+          >
+            Restaurant Name
+          </label>
           <input
             type="text"
+            id="restaurantName"
             name="restaurantName"
             placeholder="Restaurant Name"
             value={formData.restaurantName}
             onChange={handleChange}
+            className="p-2 border border-gray-300 rounded-md w-full" // Example Tailwind styles for input
           />
+        </div>
+
+        {/* Restaurant Address Input */}
+        <div>
+          <label
+            htmlFor="restaurantAddress"
+            className="block text-left text-sm font-medium text-gray-700 mb-1"
+          >
+            Restaurant Address
+          </label>
           <input
             type="text"
+            id="restaurantAddress"
             name="restaurantAddress"
             placeholder="Restaurant Address"
             value={formData.restaurantAddress}
             onChange={handleChange}
+            className="p-2 border border-gray-300 rounded-md w-full" // Example Tailwind styles for input
           />
-          <button onClick={handleNext}>Next</button>
+        </div>
+      </div>
+
+
+          <button onClick={handleNext} className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+            Next
+          </button>
         </div>
       )}
 
