@@ -41,7 +41,7 @@ const SurveyForm = () => {
   return (
       <div>
         {step === 1 && (
-          <div className="space-y-8">
+          <div className="space-y-8 fade-in">
             <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">Are you a restaurant or a supplier?</p>
             <div className="flex space-x-6">
               <button
