@@ -1,9 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from 'next/navigation';
+
 import "../styles/survey.css";
 
 const SurveyForm = () => {
+  const router = useRouter(); // Initialize router
+
   // State to keep track of the current step
   const [step, setStep] = useState(1);
 
@@ -37,11 +41,15 @@ const SurveyForm = () => {
   const handleNext = () => {
     // When moving to the next step, check if it's the last step and submit the data
     if (step === 2 && formData.userType === "restaurant") {
-      submitRestaurantData();
+      submitRestaurantData().then(() => router.push('/dashboard'));
     } else if (step === 2 && formData.userType === "supplier") {
-      submitSupplierData();
+      submitSupplierData().then(() => router.push('/dashboard'));
+    } else if (step === 3 && formData.userType === "restaurant") {
+      // Directly push to the dashboard if the CSV file upload is the last step
+      router.push('/dashboard');
+    } else {
+      setStep(step + 1); // Go to the next step
     }
-    setStep(step + 1);
   };
 
   // Function to submit restaurant data
@@ -115,7 +123,7 @@ const SurveyForm = () => {
 
   // Conditionally render form steps
   return (
-    //Ask the user if they are a resteraunt or a supplier, to esnure what type of user this is. 
+    //Ask the user if they are a restaurant or a supplier, to ensure what type of user this is. 
     <div>
       {step === 1 && (
         <div className="space-y-8 fade-in">
@@ -270,7 +278,7 @@ const SurveyForm = () => {
 
             {/* Submit Button */}
             <button
-              onClick={() => console.log("Submitted CSV file!")}
+              onClick={() => router.push('/dashboard')}
               className="px-4 py-2 w-full bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
             >
               Submit
@@ -278,9 +286,10 @@ const SurveyForm = () => {
           </div>
         </div>
       )}
-    </div>
+    </div>    
   );
 };
 
 export default SurveyForm;
+
 
