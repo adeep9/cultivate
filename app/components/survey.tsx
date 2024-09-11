@@ -122,25 +122,59 @@ const SurveyForm = () => {
       )}
 
       {step === 2 && formData.userType === "supplier" && (
-        <div>
-          <p>Supplier name and address:</p>
-          <input
-            type="text"
-            name="supplierName"
-            placeholder="Supplier Name"
-            value={formData.supplierName}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="supplierAddress"
-            placeholder="Supplier Address"
-            value={formData.supplierAddress}
-            onChange={handleChange}
-          />
-          <button onClick={handleNext}>Submit</button>
+        <div className="space-y-6 animate-fade-in"> {/* Matching container styling */}
+          <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
+            Just one more step...
+          </p>
+
+          {/* Supplier Name Input */}
+          <div>
+            <label
+              htmlFor="supplierName"
+              className="block text-left text-sm font-medium text-gray-700 mb-1"
+            >
+              Supplier Name
+            </label>
+            <input
+              type="text"
+              id="supplierName"
+              name="supplierName"
+              placeholder="Supplier Name"
+              value={formData.supplierName}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-md w-full"
+            />
+          </div>
+
+          {/* Supplier Address Input */}
+          <div>
+            <label
+              htmlFor="supplierAddress"
+              className="block text-left text-sm font-medium text-gray-700 mb-1"
+            >
+              Supplier Address
+            </label>
+            <input
+              type="text"
+              id="supplierAddress"
+              name="supplierAddress"
+              placeholder="Supplier Address"
+              value={formData.supplierAddress}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-md w-full"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            onClick={handleNext}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          >
+            Submit
+          </button>
         </div>
       )}
+
 
       {step === 3 && formData.userType === "restaurant" && (
         <div>
