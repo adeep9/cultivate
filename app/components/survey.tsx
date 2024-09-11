@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import "../styles/survey.css";
 
 const SurveyForm = () => {
   // State to keep track of the current step
@@ -38,18 +39,32 @@ const SurveyForm = () => {
 
   // Conditionally render form steps
   return (
-    <div>
-      {step === 1 && (
-        <div>
-          <p>Are you a restaurant or a supplier?</p>
-          <button onClick={() => { setFormData({ ...formData, userType: "restaurant" }); handleNext(); }}>
-            Restaurant
-          </button>
-          <button onClick={() => { setFormData({ ...formData, userType: "supplier" }); handleNext(); }}>
-            Supplier
-          </button>
-        </div>
-      )}
+      <div>
+        {step === 1 && (
+          <div className="space-y-8">
+            <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">Are you a restaurant or a supplier?</p>
+            <div className="flex space-x-6">
+              <button
+                className="btn-custom-r"
+                onClick={() => {
+                  setFormData({ ...formData, userType: "restaurant" });
+                  handleNext();
+                }}
+              >
+                Restaurant
+              </button>
+              <button
+                className="btn-custom-s"
+                onClick={() => {
+                  setFormData({ ...formData, userType: "supplier" });
+                  handleNext();
+                }}
+              >
+                Supplier
+              </button>
+            </div>
+          </div>
+        )}
 
       {step === 2 && formData.userType === "restaurant" && (
         <div>
