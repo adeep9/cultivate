@@ -177,12 +177,32 @@ const SurveyForm = () => {
 
 
       {step === 3 && formData.userType === "restaurant" && (
-        <div>
-          <p>Upload and submit a CSV file:</p>
-          <input type="file" accept=".csv" onChange={handleFileUpload} />
-          <button onClick={() => console.log("Submitted CSV file!")}>Submit</button>
+        <div className="space-y-4 animate-fade-in"> {/* Container with vertical spacing */}
+          <p className="pb-2 text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
+            Upload and submit a CSV file
+          </p>
+          
+          {/* File Upload Input */}
+          <div className="flex flex-col items-start space-y-4"> {/* Flex column for vertical layout */}
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="block h-24 w-full text-sm text-gray-700 border-2 border-dashed border-blue-300 rounded-md p-2 cursor-pointer hover:bg-blue-200/30 transition"
+            />
+
+            {/* Submit Button */}
+            <button
+              onClick={() => console.log("Submitted CSV file!")}
+              className="px-4 py-2 w-full bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       )}
+
+
     </div>
   );
 };
