@@ -1,7 +1,4 @@
-import React from "react";
 import { HeroHighlight } from "../components/ui/hero-highlight";
-import Login from "../components/log-in";
-import { Button } from "../components/ui/button"; // Adjust the import path as necessary
 import Link from "next/link"; // Import Link from next/link
 
 const Exists = () => {
@@ -10,7 +7,7 @@ const Exists = () => {
       <div className="text-center space-y-4">        
         <div className="space-y-8 animate-fade-in">
                 <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
-                    User Doesn't Exist!
+                    User does not exist!
                 </p>
                 <Link href="/signup">
                 <button
