@@ -8,13 +8,17 @@ const SurveyForm = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
   const [formData, setFormData] = useState(() => {
+    
     // Retrieve data from session storage
-    const savedData = sessionStorage.getItem('signupData');
-    return savedData ? JSON.parse(savedData) : {
-      userType: "",
-      name: "",
-      address: "",
-    };
+    useEffect(() => {
+      // Ensure sessionStorage is only accessed in the browser
+      if (typeof window !== 'undefined') {
+        const savedData = sessionStorage.getItem('signupData');
+        if (savedData) {
+          setFormData(JSON.parse(savedData));
+        }
+      }
+    }, []);
   });
   const [errors, setErrors] = useState({
     name: '',

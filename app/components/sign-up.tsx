@@ -42,7 +42,10 @@ const Signup = () => {
     }
 
     // Store data in session storage
-    sessionStorage.setItem('signupData', JSON.stringify(formData));
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('signupData', JSON.stringify(formData));
+    }
+    
     
     // Redirect to survey page
     router.push('/survey');
