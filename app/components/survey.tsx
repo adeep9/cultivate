@@ -2,33 +2,40 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import "../styles/survey.css";
+
+interface FormData {
+  [key: string]: string;
+}
 
 const SurveyForm = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
-  const [formData, setFormData] = useState(() => {
+  const [formData, setFormData] = useState<FormData>({});
 
+  useEffect(() => {
     // Retrieve data from session storage
-    // Ensure sessionStorage is only accessed in the browser
-      if (typeof window !== 'undefined') {
-        const savedData = sessionStorage.getItem('signupData');
-        if (savedData) {
-          setFormData(JSON.parse(savedData));
-        }
-      };
-  });
+    if (typeof window !== 'undefined') {
+      const savedData = sessionStorage.getItem('signupData');
+      if (savedData) {
+        setFormData(JSON.parse(savedData));
+      }
+    }
+  }, []); // Empty dependency array to run this effect only once
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prevFormData => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+
   const [errors, setErrors] = useState({
     name: '',
     address: '',
   });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   const validate = () => {
     const newErrors = { name: '', address: '' };
