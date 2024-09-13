@@ -9,7 +9,7 @@ import Link from "next/link"; // Import Link from next/link
 const LoginPage = () => {
   return (
     <HeroHighlight containerClassName="h-screen w-full flex items-center justify-center">
-      <div className="text-center space-y-4">        
+      <div className="text-center space-y-2">        
         <Login />
         <div>
           <Link href="/" passHref> 

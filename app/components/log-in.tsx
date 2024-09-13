@@ -6,10 +6,13 @@ import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState<string | null>(null); // Add state for error message
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // Reset error before making the request
+
     const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
@@ -26,14 +29,19 @@ const Login = () => {
       // If the user is not found (404), redirect to /notexists page
       console.log('User not found, redirecting to /notexists');
       router.push('/notexists');
+    } else if (res.status === 401) {
+      // If the password is incorrect (401), set error message
+      setError('Incorrect password. Please try again.');
+      console.log('Password incorrect');
     } else {
       // Handle other errors
+      setError('An error occurred. Please try again.');
       console.log('Login Error');
     }
   };
 
   return (
-    <main className="relative z-20 h-[310px] w-[400px] bg-neutral-100 border-2 border-blue-600 rounded-[20px] p-6 shadow-lg">
+    <main className="relative z-20 h-[330px] w-[400px] bg-neutral-100 border-2 border-blue-600 rounded-[20px] p-6 shadow-lg">
       <h1 className="text-4xl font-bold mb-6 tracking-tight text-blue-600">Log In</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Email Input Field */}
@@ -72,10 +80,17 @@ const Login = () => {
           />
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="text-red-600 text-xs mb-2">
+            {error}
+          </div>
+        )}
+
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full mt-4 py-2 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors"
+          className="w-full mt-2 py-2 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors"
         >
           Log In
         </button>
