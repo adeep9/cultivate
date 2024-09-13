@@ -1,13 +1,9 @@
-"use client";
+import { SidebarDemo } from "../components/ui/sidebardemo"; // Adjust the path as necessary
 
-import React from "react";
-
-const Dashboard= () => {
-    return (
-        <main>
-            Sharon
-        </main>
-    );
-  };
-  
-  export default Dashboard;
+export default function DashboardPage() {
+  return (
+    <div>
+        <SidebarDemo/>
+    </div>
+  );
+}
