@@ -49,7 +49,7 @@ export function SidebarDemo() {
   return (
     <div
       className={cn(
-        "flex flex-row md:flex-row bg-gray-100 dark:bg-neutral-800 w-full h-screen border border-neutral-200 dark:border-neutral-700 overflow-hidden"
+        "flex flex-row md:flex-row bg-amber-50 dark:bg-neutral-800 w-full h-screen border border-neutral-200 dark:border-neutral-700 overflow-hidden"
       )}
     >
       {/* Wrap the entire sidebar logic in SidebarProvider */}
@@ -170,23 +170,8 @@ export const LogoIcon = () => {
 const Dashboard = () => {
   return (
     <div className="flex w-full min-h-screen">
-      <div className="flex flex-col flex-1 p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 gap-2">
-        <div className="flex gap-2">
-          {[...new Array(4)].map((_, i) => (
-            <div
-              key={"first-array" + i}
-              className="h-20 w-full rounded-lg bg-gray-100 dark:bg-neutral-800 animate-pulse"
-            ></div>
-          ))}
-        </div>
-        <div className="flex gap-2 flex-1">
-          {[...new Array(2)].map((_, i) => (
-            <div
-              key={"second-array" + i}
-              className="h-full w-full rounded-lg bg-gray-100 dark:bg-neutral-800 animate-pulse"
-            ></div>
-          ))}
-        </div>
+      <div className="flex flex-col flex-1 p-2 md:p-10 rounded-tl-2xl border border-neutral-200 dark:border-neutral-700 bg-goated dark:bg-neutral-900 gap-2">
+
       </div>
     </div>
   );
