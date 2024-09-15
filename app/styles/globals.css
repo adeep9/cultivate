@@ -18,6 +18,9 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  overflow: hidden; /* Prevents both x and y scrolling */
+  width: 100%;      /* Ensures the body takes the full width of the viewport */
+  height: 100%;     /* Ensures the body takes the full height of the viewport */
 }
 
 @layer utilities {

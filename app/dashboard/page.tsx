@@ -1,9 +1,15 @@
-import { SidebarDemo } from "../components/ui/sidebardemo"; // Adjust the path as necessary
+// Import necessary libraries and components
+import React from 'react';
+import { Dashboard } from '../components/dashboard';
 
-export default function DashboardPage() {
+const DashboardPage = () => {
   return (
     <div>
-        <SidebarDemo/>
+      <Dashboard />
     </div>
   );
-}
+};
+
+export default DashboardPage;
+
+
