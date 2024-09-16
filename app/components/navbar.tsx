@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 
 export function Navbar() {
   // State to toggle navbar height
@@ -32,31 +33,34 @@ export function Navbar() {
         ></button>
 
         {/* Avatar with absolute positioning and adjusted top value */}
-        <Avatar
-          className="absolute right-4"
-          style={{
-            top: "1.2rem", // Move avatar up by 2rem
-          }}
-        >
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
+        <Link href="/account">
+            {/* Wrap Avatar with Link to navigate to /account */}
+          <Avatar
+            className="absolute right-4 cursor-pointer" // Added cursor-pointer for better UX
+            style={{
+              top: "1.2rem", // Position the avatar as required
+            }}
+          >
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+        </Link>
 
         {/* Conditionally rendered div only visible when the navbar is expanded */}
         {isExpanded && (
           <div className="p-6 h-48 mt-20">
             <p>
-              <a href="https://www.example.com" target="_blank" rel="noopener noreferrer" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
+              <a href="/dashboard" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
                 Dashboard
               </a>
             </p>
             <p>
-              <a href="https://www.another-example.com" target="_blank" rel="noopener noreferrer" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
+              <a href="/orders" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
                 Orders
               </a>
             </p>
             <p>
-              <a href="https://www.more-info.com" target="_blank" rel="noopener noreferrer" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
+              <a href="/payments" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
                 Payments
               </a>
             </p>

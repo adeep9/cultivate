@@ -2,7 +2,7 @@
 import React from 'react';
 import { Dualbar } from '../components/resterauntdashboard/dualbar';
 
-const DashboardPage = () => {
+const OrdersPage = () => {
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
 
@@ -10,7 +10,7 @@ const DashboardPage = () => {
 
       <div className="hidden md:block p-6 flex-col justify-start w-full">
         <p className="text-2xl text-black tracking-tight font-medium mb-4 mt-2 translate-x-1">
-          Dashboard
+          Orders
         </p>
         <hr className="border-t border-gray-300 w-full translate-y-[1px]" />
       </div>
@@ -18,9 +18,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
-
-
-
-
-
+export default OrdersPage;

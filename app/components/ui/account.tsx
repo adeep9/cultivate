@@ -1,11 +1,10 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link"; // Import the Link component from Next.js
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"; // Ensure you import the Avatar components correctly
 
-export function Account() {
+const AccountButton = () => {
   return (
-    <div className="mt-64 transform translate-y-44">
-      <hr className="border-t border-gray-300 mb-4 mt-16" />
-      {/* Button with hover effect and styling */}
-      <button className="pt-2 flex items-center border border-transparent hover:border-gray-200 rounded-md p-2 cursor-pointer transition-colors w-full text-left">
+    <Link href="/account">
+      <div className="pt-2 flex items-center border border-transparent hover:border-gray-200 rounded-md p-2 cursor-pointer transition-colors w-full text-left">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" />
           <AvatarFallback>CN</AvatarFallback>
@@ -15,8 +14,12 @@ export function Account() {
           <p className="text-sm font-medium text-black tracking-tight">Adeep Mitra</p>
           <p className="text-xs text-gray-500">adeepmitr@gmail.com</p>
         </div>
-      </button>
-    </div>
+      </div>
+    </Link>
   );
-}
+};
+
+export default AccountButton;
+
+
 
