@@ -8,7 +8,7 @@ export function Navbar() {
   // State to toggle navbar height
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Function to toggle the navbar height
+  // Function to toggle the navbar height and icon
   const toggleNavbarHeight = () => {
     setIsExpanded(!isExpanded);
   };
@@ -26,15 +26,21 @@ export function Navbar() {
         {/* Button with absolute positioning and adjusted top value */}
         <button
           onClick={toggleNavbarHeight} // Add onClick event handler
-          className="h-11 w-11 bg-gray-50 rounded-md border-[1.5px] border-gray-300 hover:bg-slate-100 absolute left-4"
+          className="h-11 w-11 bg-gray-50 rounded-md border-[1.5px] border-gray-300 hover:bg-slate-100 absolute left-4 flex items-center justify-center"
           style={{
             top: "1.2rem", // Move button up by 2rem
           }}
-        ></button>
+        >
+          {/* Conditionally render the SVG icon based on expanded state */}
+          <img
+            src={isExpanded ? "/x.svg" : "/align-justify.svg"}
+            alt="Icon"
+            className="w-5 h-5"
+          />
+        </button>
 
         {/* Avatar with absolute positioning and adjusted top value */}
         <Link href="/account">
-            {/* Wrap Avatar with Link to navigate to /account */}
           <Avatar
             className="absolute right-4 cursor-pointer" // Added cursor-pointer for better UX
             style={{
@@ -49,20 +55,30 @@ export function Navbar() {
         {/* Conditionally rendered div only visible when the navbar is expanded */}
         {isExpanded && (
           <div className="p-6 h-48 mt-20">
+            {/* Menu Links */}
             <p>
-              <a href="/dashboard" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
+              <Link
+                href="/dashboard"
+                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
+              >
                 Dashboard
-              </a>
+              </Link>
             </p>
             <p>
-              <a href="/orders" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
+              <Link
+                href="/orders"
+                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
+              >
                 Orders
-              </a>
+              </Link>
             </p>
             <p>
-              <a href="/payments" className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline">
+              <Link
+                href="/payments"
+                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
+              >
                 Payments
-              </a>
+              </Link>
             </p>
           </div>
         )}
@@ -70,5 +86,6 @@ export function Navbar() {
     </main>
   );
 }
+
 
 

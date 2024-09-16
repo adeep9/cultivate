@@ -24,7 +24,7 @@ export function Sidebar() {
           <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Main </p>
           <div className="pt-4">
             <Buttontile label="Home" href="/dashboard" Icon={HomeIcon} />
-            <Buttontile label="About" href="/orders" Icon={OrderIcon} />
+            <Buttontile label="Orders" href="/orders" Icon={OrderIcon} />
             <Buttontile label="Payments" href="/payments" Icon={PaymentIcon} />
           </div>
           <div className="mt-64 translate-y-48">
