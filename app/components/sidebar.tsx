@@ -1,7 +1,5 @@
 import { Buttontile } from "../components/ui/tile"; // Adjust import path as needed
 import  Account  from "../components/ui/account";
-import { SVGProps } from "react";
-
 
 const HomeIcon = ({ className }: { className?: string }) => (
   <img src="/home.svg" alt="Home Icon" className={className} />
