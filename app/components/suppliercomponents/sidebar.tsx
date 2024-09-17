@@ -14,10 +14,7 @@ const PaymentIcon = ({ className }: { className?: string }) => (
   <img src="/zap.svg" alt="Home Icon" className={className} />
 );
 
-export function Sidebar({type}: {type?:string}) {
-
-  //define user type
-  const usertype = type
+export function Sidebar() {
 
   return (
     <div className="w-60 h-screen bg-white border border-slate-300">

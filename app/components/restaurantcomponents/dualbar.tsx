@@ -7,8 +7,6 @@ export function Dualbar() {
   // Get navbar constant links depending on user type
   // Map navbar links within <p> tags
 
-  const userType: string = "Restaurant";
-
   return (
     <div>
       {/* Sidebar for medium and larger screens */}

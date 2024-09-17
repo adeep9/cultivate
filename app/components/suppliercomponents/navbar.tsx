@@ -13,11 +13,7 @@ import {
 import AccountForm from "../ui/accountedit"; // Ensure you have the correct path for AccountForm
 import Link from "next/link"; 
 
-type NavbarProps = {
-  type?: string;
-};
-
-export function Navbar({type}: NavbarProps) {
+export function Navbar() {
   // State to toggle navbar height
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -25,9 +21,6 @@ export function Navbar({type}: NavbarProps) {
   const toggleNavbarHeight = () => {
     setIsExpanded(!isExpanded);
   };
-
-  //define user type
-  const usertype = type
 
   return (
     <main>

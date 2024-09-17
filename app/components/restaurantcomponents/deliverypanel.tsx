@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
 import React from 'react';
+import Image from 'next/image';
 
 type DeliveryPanelProps = {
   className?: string; // Optional className prop
