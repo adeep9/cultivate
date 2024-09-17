@@ -1,11 +1,11 @@
 // Import necessary libraries and components
 import React from 'react';
-import { Dualbar } from '../components/resterauntdashboard/dualbar';
-import DeliveryPanel from '../components/resterauntdashboard/deliverypanel';
-import Bids from '../components/resterauntdashboard/bids';
-import Create from '../components/resterauntdashboard/createorder';
-import CurrentOrder from '../components/resterauntdashboard/currentorder';
-import OrderList from '../components/resterauntdashboard/orderlist';
+import { Dualbar } from '../../components/restaurantcomponents/dualbar';
+import DeliveryPanel from '../../components/restaurantcomponents/deliverypanel';
+import Bids from '../../components/restaurantcomponents/bids';
+import Create from '../../components/restaurantcomponents/createorder';
+import CurrentOrder from '../../components/restaurantcomponents/currentorder';
+import OrderList from '../../components/restaurantcomponents/orderlist';
 
 
 const OrdersPage = () => {

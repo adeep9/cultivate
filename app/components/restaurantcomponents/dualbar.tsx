@@ -1,7 +1,14 @@
-import { Sidebar } from "../sidebar";
-import { Navbar } from "../navbar";
+import { Sidebar } from "./sidebar";
+import { Navbar } from "./navbar";
 
 export function Dualbar() {
+
+  // Access user type. Session data? R or S?
+  // Get navbar constant links depending on user type
+  // Map navbar links within <p> tags
+
+  const userType: string = "Restaurant";
+
   return (
     <div>
       {/* Sidebar for medium and larger screens */}

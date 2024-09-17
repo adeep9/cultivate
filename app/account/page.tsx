@@ -1,6 +1,6 @@
 // Import necessary libraries and components
 import React from 'react';
-import { Dualbar } from '../components/resterauntdashboard/dualbar';
+import { Dualbar } from '../components/restaurantcomponents/dualbar';
 
 const AccountPage = () => {
   return (

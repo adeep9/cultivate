@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger, // Import SheetTrigger from Sheet component
 } from "@/components/ui/sheet"; // Ensure you have the correct path for the Sheet components
-import AccountForm from "./ui/accountedit"; // Ensure you have the correct path for AccountForm
+import AccountForm from "../ui/accountedit"; // Ensure you have the correct path for AccountForm
 import Link from "next/link"; 
 
 export function Navbar() {
@@ -85,7 +85,7 @@ export function Navbar() {
             {/* Menu Links */}
             <p>
               <Link
-                href="/dashboard"
+                href="/rdashboard"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
                 Dashboard
@@ -93,7 +93,7 @@ export function Navbar() {
             </p>
             <p>
               <Link
-                href="/orders"
+                href="/resteraunt/orders"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
                 Orders
@@ -101,7 +101,7 @@ export function Navbar() {
             </p>
             <p>
               <Link
-                href="/payments"
+                href="/resteraunt/payments"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
                 Payments

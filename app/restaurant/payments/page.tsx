@@ -1,9 +1,9 @@
 // Import necessary libraries and components
 import React from 'react';
-import { Dualbar } from '../components/resterauntdashboard/dualbar';
-import Bids from '../components/resterauntdashboard/bids';
-import Billing from '../components/resterauntdashboard/billing';
-import Docket from '../components/resterauntdashboard/docket';
+import { Dualbar } from '../../components/restaurantcomponents/dualbar';
+import Bids from '../../components/restaurantcomponents/bids';
+import Billing from '../../components/restaurantcomponents/billing';
+import Docket from '../../components/restaurantcomponents/docket';
 
 const PaymentsPage = () => {
   return (

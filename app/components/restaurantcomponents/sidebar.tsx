@@ -1,5 +1,5 @@
-import { Buttontile } from "../components/ui/tile"; // Adjust import path as needed
-import  Account  from "../components/ui/account";
+import { Buttontile } from "../ui/tile"; // Adjust import path as needed
+import  Account  from "../ui/account";
 
 
 const HomeIcon = ({ className }: { className?: string }) => (
@@ -24,9 +24,9 @@ export function Sidebar() {
         <div className="w-full h-full">
           <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Main </p>
           <div className="pt-4">
-            <Buttontile label="Home" href="/dashboard" Icon={HomeIcon} />
-            <Buttontile label="Orders" href="/orders" Icon={OrderIcon} />
-            <Buttontile label="Payments" href="/payments" Icon={PaymentIcon} />
+            <Buttontile label="Home" href="/rdashboard" Icon={HomeIcon} />
+            <Buttontile label="Orders" href="/resteraunt/orders" Icon={OrderIcon} />
+            <Buttontile label="Payments" href="/resteraunt/payments" Icon={PaymentIcon} />
           </div>
           <div className="mt-64 translate-y-48">
             <Account />
