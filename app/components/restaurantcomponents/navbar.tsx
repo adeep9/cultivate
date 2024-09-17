@@ -93,7 +93,7 @@ export function Navbar() {
             </p>
             <p>
               <Link
-                href="/resteraunt/orders"
+                href="/restaurant/orders"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
                 Orders
@@ -101,7 +101,7 @@ export function Navbar() {
             </p>
             <p>
               <Link
-                href="/resteraunt/payments"
+                href="/restaurant/payments"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
                 Payments

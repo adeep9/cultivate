@@ -25,8 +25,8 @@ export function Sidebar() {
           <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Main </p>
           <div className="pt-4">
             <Buttontile label="Home" href="/rdashboard" Icon={HomeIcon} />
-            <Buttontile label="Orders" href="/resteraunt/orders" Icon={OrderIcon} />
-            <Buttontile label="Payments" href="/resteraunt/payments" Icon={PaymentIcon} />
+            <Buttontile label="Orders" href="/restaurant/orders" Icon={OrderIcon} />
+            <Buttontile label="Payments" href="/restaurant/payments" Icon={PaymentIcon} />
           </div>
           <div className="mt-64 translate-y-48">
             <Account />

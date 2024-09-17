@@ -1,7 +1,7 @@
 "use client"
 
+import Link from 'next/link'
 import { Button } from "@/components/ui/button"
-
 import {
   Card,
   CardDescription,
@@ -21,8 +21,11 @@ export default function Create() {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Button>Create New Order</Button>
+        <Link href="/restaurant/createorder">
+          <Button>Create New Order</Button>
+        </Link>
       </CardFooter>
     </Card>
   )
 }
+
