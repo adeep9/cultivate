@@ -1,8 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger, // Import SheetTrigger from Sheet component
+} from "@/components/ui/sheet"; // Ensure you have the correct path for the Sheet components
+import AccountForm from "./ui/accountedit"; // Ensure you have the correct path for AccountForm
+import Link from "next/link"; 
 
 export function Navbar() {
   // State to toggle navbar height
@@ -39,18 +48,36 @@ export function Navbar() {
           />
         </button>
 
-        {/* Avatar with absolute positioning and adjusted top value */}
-        <Link href="/account">
-          <Avatar
-            className="absolute right-4 cursor-pointer" // Added cursor-pointer for better UX
-            style={{
-              top: "1.2rem", // Position the avatar as required
-            }}
-          >
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-        </Link>
+        {/* Sheet and Avatar with absolute positioning and adjusted top value */}
+        <Sheet>
+          <SheetTrigger asChild>
+            <Avatar
+              className="absolute right-4 cursor-pointer" // Added cursor-pointer for better UX
+              style={{
+                top: "1.2rem", // Position the avatar as required
+              }}
+            >
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </SheetTrigger>
+
+          {/* Sheet content that will be shown when the trigger is clicked */}
+          <SheetContent>
+            <SheetHeader>
+              <SheetTitle>Account Information</SheetTitle>
+              <SheetDescription>
+                This is where the account details would go.
+              </SheetDescription>
+            </SheetHeader>
+            {/* Add additional content or components here */}
+            <div className="p-4">
+              <div>
+                <AccountForm />
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
 
         {/* Conditionally rendered div only visible when the navbar is expanded */}
         {isExpanded && (
@@ -86,6 +113,7 @@ export function Navbar() {
     </main>
   );
 }
+
 
 
 
