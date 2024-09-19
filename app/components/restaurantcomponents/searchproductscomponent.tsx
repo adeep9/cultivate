@@ -26,7 +26,7 @@ const ProductTableRow: React.FC<ProductTableRowProps> = ({ productCode, removeVa
     <>
       <TableRow>
         <TableCell>
-          <button
+          <button type="button"
             className="font-semibold bg-transparent p-1 rounded-md hover:point hover:bg-gray-200"
             onClick={togglePopup}
           >

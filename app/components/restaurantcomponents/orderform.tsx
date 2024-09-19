@@ -66,14 +66,6 @@ export default function OrderForm() {
     // Add your form submission logic here
 
     // Advance to Step 4 after submission
-  };
-
-  const handleSubmitt = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Add your form submission logic here
-
-    // Advance to Step 4 after submission
     setStep(4);
   };
 
@@ -217,7 +209,7 @@ export default function OrderForm() {
               <Button type="button" variant={'outline'} onClick={handleBack} className="absolute bottom-0 left-0 p-4">
                 Back
               </Button>
-              <Button type="submit" variant={'default'} onClick={handleSubmitt} className="absolute bottom-0 right-0 p-4">
+              <Button type="submit" variant={'default'} className="absolute bottom-0 right-0 p-4">
                 Submit
               </Button>
             </div>
