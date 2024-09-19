@@ -35,7 +35,7 @@ const TableBody = React.forwardRef<
   />
 ))
 TableBody.displayName = "TableBody"
-
+ 
 const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>

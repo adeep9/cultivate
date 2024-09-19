@@ -83,6 +83,7 @@ export function Navbar() {
         {isExpanded && (
           <div className="p-6 h-48 mt-20">
             {/* Menu Links */}
+            {/* Menu Links
             <p>
               <Link
                 href="/rdashboard"
@@ -91,6 +92,10 @@ export function Navbar() {
                 Dashboard
               </Link>
             </p>
+
+            All this is commented out as i dont feel like a dashboard page is nesssecary
+
+            */}
             <p>
               <Link
                 href="/restaurant/orders"

@@ -24,11 +24,11 @@ export function Sidebar() {
         <div className="w-full h-full">
           <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Main </p>
           <div className="pt-4">
-            <Buttontile label="Home" href="/rdashboard" Icon={HomeIcon} />
+            {/*<Buttontile label="Home" href="/rdashboard" Icon={HomeIcon} /> ** this is commented out as I dont feel like dashboard page nessecary** */}
             <Buttontile label="Orders" href="/restaurant/orders" Icon={OrderIcon} />
             <Buttontile label="Payments" href="/restaurant/payments" Icon={PaymentIcon} />
           </div>
-          <div className="mt-64 translate-y-48">
+          <div className="mt-64 translate-y-56">
             <Account />
           </div>
         </div>

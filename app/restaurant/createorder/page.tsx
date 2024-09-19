@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Dualbar } from '../../components/restaurantcomponents/dualbar';
-import DocketCreate from '../../components/restaurantcomponents/docketcreate';
 import Orderform from '../../components/restaurantcomponents/orderform';
 
 
@@ -14,7 +13,7 @@ const DashboardPage = () => {
       <Dualbar />
 
       {/* Main Content Area for All Screens */}
-      <div className="flex flex-col justify-start  w-full p-6">
+      <div className="orders-page flex flex-col justify-start  w-full p-6">
         {/* Title and Horizontal Line (Visible on Medium and Larger Screens) */}
         <div className="hidden md:flex flex-col w-full ">
           {/* Hidden on small screens, visible on md and larger */}
@@ -25,15 +24,10 @@ const DashboardPage = () => {
         </div>
 
         {/* Bottom Section Below the Line (Always Visible) */}
-        <div className="w-full h-full mt-4 flex flex-col md:flex-row gap-4">
+        <div className="w-full max-h-full mt-4 flex flex-col md:flex-row gap-4">
           {/* Container for Orderform */}
           <div className="flex-1">
             <Orderform />
-          </div>
-
-          {/* Container for DocketCreate */}
-          <div className="lg:max-w-96 flex-1">
-            <DocketCreate />
           </div>
         </div>
 
