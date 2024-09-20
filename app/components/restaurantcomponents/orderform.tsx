@@ -3,28 +3,26 @@
 import { useState } from 'react';
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import SearchProducts from './searchproducts';
+import SearchProducts, { ProductWithVolume } from './searchproducts';
 import { Calendar } from "@/components/ui/calendar";
-import DocketCreate from "./docketcreate";
 
 export default function OrderForm() {
   // State to manage form steps and inputs
   const [step, setStep] = useState<number>(1);
   const [formData, setFormData] = useState<{
-    itemSelection: string;
     orderDate: string;
     orderTime: string;
     notes: string;
-    expectedPrice: string;
   }>({
-    itemSelection: '',
     orderDate: '',
     orderTime: '',
     notes: '',
-    expectedPrice: '',
   });
 
   const [date, setDate] = React.useState<Date | undefined>(new Date());
+
+  // State for products
+  const [products, setProducts] = useState<ProductWithVolume[]>([]);
 
   // Handle the date change from the calendar
   const handleDateChange = (selectedDate: Date | undefined) => {
@@ -47,6 +45,12 @@ export default function OrderForm() {
       ...prevData,
       [name]: value,
     }));
+
+    // Keep date picker and input in sync
+    if (name === "orderDate") {
+      const selectedDate = new Date(value);
+      setDate(selectedDate);
+    }
   };
 
   // Function to go to the next step
@@ -60,13 +64,37 @@ export default function OrderForm() {
   };
 
   // Function to handle form submission
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Add your form submission logic here
 
-    // Advance to Step 4 after submission
-    setStep(4);
+    // Combine formData and products to send to backend
+    const orderData = {
+      orderInfo: formData,
+      products: products,
+    };
+
+    try {
+      const response = await fetch('/api/orders/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit order');
+      }
+
+      const result = await response.json();
+      console.log('Order submitted:', result);
+
+      // Advance to Step 4 after successful submission
+      setStep(4);
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      // Handle error (e.g., display error message to the user)
+    }
   };
 
   return (
@@ -86,13 +114,13 @@ export default function OrderForm() {
             {/* Column of two buttons */}
             <div className='flex flex-row pt-8 gap-4 pb-6'>
               <button
-                type="button" // Added type="button"
+                type="button"
                 className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2'
               >
                 Par Levels
               </button>
               <button
-                type="button" // Added type="button"
+                type="button"
                 className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2'
               >
                 Past Order
@@ -101,9 +129,9 @@ export default function OrderForm() {
 
             <hr />
 
-            {/* Searchbar */}
+            {/* SearchProducts Component */}
             <div className='pt-6'>
-              <SearchProducts />
+              <SearchProducts products={products} setProducts={setProducts} />
             </div>
 
             {/* Button for next step */}
@@ -127,7 +155,7 @@ export default function OrderForm() {
               </div>
             </div>
 
-            {/* Date Input */}
+            {/* Date and Time Inputs */}
             <div className="pt-10 flex justify-center">
               <div className="flex flex-row w-full max-w-4xl">
                 <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-8 mx-auto">
@@ -153,7 +181,7 @@ export default function OrderForm() {
                     </div>
                   </div>
 
-                  {/* Time Section */}
+                  {/* Time and Notes Section */}
                   <div className="flex flex-col items-center md:items-start w-full">
                     <h3 className="text-lg font-medium mb-0 text-center md:text-left">Select Time</h3>
                     <div className="pt-2">
@@ -179,6 +207,7 @@ export default function OrderForm() {
               </div>
             </div>
 
+            {/* Navigation Buttons */}
             <div className='relative w-full h-full min-h-[100px]'>
               <Button type="button" variant={'outline'} onClick={handleBack} className="absolute bottom-0 left-0 p-4">
                 Back
@@ -190,21 +219,40 @@ export default function OrderForm() {
           </div>
         )}
 
-        {/* Step 3: Notes and Expected Price */}
+        {/* Step 3: Review and Submit */}
         {step === 3 && (
           <div>
             <div className='flex flex-row justify-between'>
               <h2 className='tracking-tight font-medium text-3xl'>Step 3</h2>
-              <div className='w-20 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center'>
-                <h3 className='tracking-tight font-medium text-gray-400'>Notes</h3>
+              <div className='w-32 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-center'>
+                <h3 className='tracking-tight font-medium text-gray-400'>Review Order</h3>
               </div>
             </div>
 
-            <div className='pt-4 pb-8'>
-              <DocketCreate />
+            {/* Display order summary */}
+            <div className='pt-8 pb-16'>
+              <h3 className="text-lg font-medium mb-4">Order Summary</h3>
+
+              {/* Products Table */}
+              <SearchProducts products={products} setProducts={setProducts} readOnly={true} />
+
+              {/* Display other form data */}
+              <div className="mt-8">
+                <h4 className="text-md font-medium mb-2">Order Information</h4>
+                <div className="flex flex-col space-y-2">
+                  <div>
+                    <strong>Date:</strong> {formData.orderDate}
+                  </div>
+                  <div>
+                    <strong>Time:</strong> {formData.orderTime}
+                  </div>
+                  <div>
+                    <strong>Notes:</strong> {formData.notes || 'No additional notes.'}
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <div></div>
             <div className='relative w-full h-full pt-4'>
               <Button type="button" variant={'outline'} onClick={handleBack} className="absolute bottom-0 left-0 p-4">
                 Back
@@ -226,3 +274,6 @@ export default function OrderForm() {
     </main>
   );
 }
+
+
+

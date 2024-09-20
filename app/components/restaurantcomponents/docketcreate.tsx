@@ -34,7 +34,7 @@ import { Separator } from "@/components/ui/separator"
 
 export default function DocketCreate() {
   return (
-    <Card className="overflow-hidden min-w-48 min-h-[525px]">
+    <Card className="overflow-hidden min-w-48">
       <CardHeader className="flex flex-row items-start bg-muted/50">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
@@ -70,62 +70,53 @@ export default function DocketCreate() {
       <CardContent className="p-6 text-sm">
         <div className="grid gap-3">
           <div className="font-semibold">Order Details</div>
-          <ul className="grid gap-3">
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Glimmer Lamps x <span>2</span>
-              </span>
-              <span>$250.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
-          </ul>
+          {/* Updated layout with responsive columns */}
+          <div className="flex flex-col lg:flex-row">
+            {/* First Column */}
+            <ul className="flex-1 lg:pr-3 lg:border-r lg:border-gray-300">
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Glimmer Lamps x <span>2</span>
+                </span>
+                <span>$250.00</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Aqua Filters x <span>1</span>
+                </span>
+                <span>$49.00</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Aqua Filters x <span>1</span>
+                </span>
+                <span>$49.00</span>
+              </li>
+              {/* Add more items to the first column as needed */}
+            </ul>
+            {/* Second Column */}
+            <ul className="flex-1 lg:pl-3">
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Aqua Filters x <span>1</span>
+                </span>
+                <span>$49.00</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Aqua Filters x <span>1</span>
+                </span>
+                <span>$49.00</span>
+              </li>
+              <li className="flex items-center justify-between">
+                <span className="text-muted-foreground">
+                  Aqua Filters x <span>1</span>
+                </span>
+                <span>$49.00</span>
+              </li>
+              {/* Add more items to the second column as needed */}
+            </ul>
+          </div>
           <Separator className="my-2" />
           <ul className="grid gap-3">
             <li className="flex items-center justify-between">
@@ -152,8 +143,11 @@ export default function DocketCreate() {
           Updated <time dateTime="2023-11-23">November 23, 2023</time>
         </div>
         <Pagination className="ml-auto mr-0 w-auto">
+          {/* Pagination content */}
         </Pagination>
       </CardFooter>
     </Card>
   )
 }
+
+

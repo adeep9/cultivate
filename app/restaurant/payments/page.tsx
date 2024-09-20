@@ -1,7 +1,7 @@
 // Import necessary libraries and components
 import React from 'react';
 import { Dualbar } from '../../components/restaurantcomponents/dualbar';
-import Bids from '../../components/restaurantcomponents/bids';
+import Bids from '../../components/restaurantcomponents/activeorder';
 import Billing from '../../components/restaurantcomponents/billing';
 import Docket from '../../components/restaurantcomponents/docket';
 

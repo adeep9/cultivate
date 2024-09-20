@@ -1,7 +1,7 @@
 // Import necessary libraries and components
 import React from 'react';
 import { Dualbar } from '../../components/restaurantcomponents/dualbar';
-import Bids from '../../components/restaurantcomponents/bids';
+import Bids from '../../components/restaurantcomponents/activeorder';
 import Billing from '../../components/restaurantcomponents/billing';
 import Docket from '../../components/restaurantcomponents/docket';
 
@@ -30,10 +30,8 @@ const PaymentsPage = () => {
             <Billing className="flex-1" />
           </div>
 
-          <div className="flex flex-col md:flex-row gap-4">
+          <div>
             <Docket />
-            <div className='w-full h-full bg-white border rounded-xl border-gray-800'>
-            </div>
           </div>
 
         </div>

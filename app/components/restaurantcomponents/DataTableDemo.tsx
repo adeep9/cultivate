@@ -1,7 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { CaretSortIcon } from "@radix-ui/react-icons";
+import {
+  CaretSortIcon,
+} from "@radix-ui/react-icons";
 import {
   ColumnDef,
   SortingState,
@@ -22,13 +24,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-// Dummy data
-const dummyData: Product[] = [
-  { id: "1", name: "Tomato", price: 15 },
-  { id: "2", name: "Apples", price: 69 },
-  { id: "3", name: "Grapes", price: 20 },
-];
-
 export type Product = {
   id: string;
   name: string;
@@ -39,8 +34,71 @@ interface DataTableProps {
   onAddProduct: (product: Product) => void;
 }
 
+const dummyData: Product[] = [
+  { id: "1", name: "Tomato", price: 15 },
+  { id: "2", name: "Apples", price: 69 },
+  { id: "3", name: "Grapes", price: 20 },
+];
+
 export const columns: ColumnDef<Product>[] = [
-  // ... your columns definitions
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        // Disable the checkbox in the header to enforce single selection
+        disabled={true}
+      />
+    ),
+    cell: ({ row, table }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={() => {
+          // When a row is selected, clear all other selections first
+          table.toggleAllRowsSelected(false);
+          row.toggleSelected(true);
+        }}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Product
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "price",
+    header: () => <div className="text-right">Price</div>,
+    cell: ({ row }) => {
+      const price = parseFloat(row.getValue("price"));
+
+      // Format the price as a dollar amount
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(price);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
+  },
 ];
 
 export function DataTableDemo({ onAddProduct }: DataTableProps) {
@@ -79,8 +137,7 @@ export function DataTableDemo({ onAddProduct }: DataTableProps) {
   };
 
   return (
-    <div className="w-full flex flex-col h-full">
-      {/* Search Input */}
+    <div className="w-full">
       <div className="flex items-center py-4">
         <Input
           placeholder="Search Items"
@@ -89,9 +146,7 @@ export function DataTableDemo({ onAddProduct }: DataTableProps) {
           className=""
         />
       </div>
-
-      {/* Table */}
-      <div className="rounded-md border flex-grow overflow-auto">
+      <div className="rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -141,17 +196,13 @@ export function DataTableDemo({ onAddProduct }: DataTableProps) {
           </TableBody>
         </Table>
       </div>
-
-      {/* Add Button */}
-      <div className="flex items-center justify-end">
-        <Button type="button" onClick={handleAdd}>
-          Add
-        </Button>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="translate-y-[18px]">
+          <Button type="button" onClick={handleAdd}>
+            Add
+          </Button>
+        </div>
       </div>
     </div>
   );
 }
-
-
-
-

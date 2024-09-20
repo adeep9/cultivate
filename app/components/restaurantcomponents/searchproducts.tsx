@@ -12,20 +12,53 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCell,
+} from "@/components/ui/table";
 
-import ProductTableRow from './searchproductscomponent';
+import ProductTableRow from './searchproductscomponent'; // Adjust the import path if necessary
+import { DataTableDemo, Product } from './DataTableDemo'; // Import DataTableDemo and Product type
 
-export default function SearchProducts() {
-  const [productRows, setProductRows] = useState<string[]>(["Carrot"]);
+export type ProductWithVolume = Product & { volume: number };
 
-  const addVariant = () => {
-    const newProductCode = `Potato-${productRows.length + 1}`; // Ensure unique product code
-    setProductRows([...productRows, newProductCode]);
+interface SearchProductsProps {
+  products: ProductWithVolume[];
+  setProducts: React.Dispatch<React.SetStateAction<ProductWithVolume[]>>;
+  readOnly?: boolean;
+}
+
+export default function SearchProducts({ products, setProducts, readOnly = false }: SearchProductsProps) {
+  const [isSearchPopupOpen, setIsSearchPopupOpen] = useState<boolean>(false);
+
+  const addProduct = (product: Product) => {
+    // Initialize volume to 1 when adding a new product
+    const productWithVolume = { ...product, volume: 1 };
+    setProducts((prevProducts) => [...prevProducts, productWithVolume]);
+    setIsSearchPopupOpen(false); // Close the search popup after adding
   };
 
-  const removeVariant = (productCode: string) => {
-    setProductRows(productRows.filter(code => code !== productCode));
+  const removeProduct = (productId: string) => {
+    setProducts((prevProducts) =>
+      prevProducts.filter((product) => product.id !== productId)
+    );
+  };
+
+  // Define the updateProductVolume function
+  const updateProductVolume = (productId: string, newVolume: number) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === productId ? { ...product, volume: newVolume } : product
+      )
+    );
+  };
+
+  const toggleSearchPopup = () => {
+    setIsSearchPopupOpen(!isSearchPopupOpen);
   };
 
   return (
@@ -39,33 +72,73 @@ export default function SearchProducts() {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Product</TableHead>
-                <TableHead className="w-36">Price (Per Unit)</TableHead>
-                <TableHead className="w-36 lg:w-64">Volume</TableHead>
-                <TableHead className="w-32">Total Price</TableHead>
+                <TableHead className="w-64">Product</TableHead>
+                <TableHead className="w-48">Price (Per Unit)</TableHead>
+                <TableHead className="w-36 lg:w-96">Volume</TableHead>
+                <TableHead className="w-48">Total Price</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {productRows.map((productCode) => (
-                <ProductTableRow
-                  key={productCode}
-                  productCode={productCode}
-                  removeVariant={removeVariant} // Passing the remove function as a prop
-                />
-              ))}
+              {products.length > 0 ? (
+                products.map((product) => (
+                  <ProductTableRow
+                    key={product.id}
+                    product={product}
+                    removeProduct={removeProduct}
+                    updateProductVolume={updateProductVolume}
+                    readOnly={readOnly}
+                  />
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center">
+                    No products added.
+                  </TableCell>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
         </CardContent>
-        <CardFooter className="justify-center border-t p-4">
-          <Button type="button" size="sm" variant="ghost" className="gap-1" onClick={addVariant}>
-            <PlusCircle className="h-3.5 w-3.5" />
-            Add Variant
-          </Button>
-        </CardFooter>
+        {!readOnly && (
+          <CardFooter className="justify-center border-t p-4">
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="gap-1"
+              onClick={toggleSearchPopup}
+            >
+              <PlusCircle className="h-3.5 w-3.5" />
+              Add Product
+            </Button>
+          </CardFooter>
+        )}
       </Card>
+
+      {/* Search Products Popup */}
+      {isSearchPopupOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-4 rounded-md">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={toggleSearchPopup}
+              className="mb-4"
+            >
+              Close
+            </Button>
+            <DataTableDemo onAddProduct={addProduct} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+
+
+
+
 
 
 
