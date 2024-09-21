@@ -84,30 +84,30 @@ const ProductTableRow: React.FC<ProductTableRowProps> = ({
           </div>
         </TableCell>
         {!readOnly && removeProduct && (
-              <button
-                onClick={handleRemove}
-                className="ml-auto text-gray-500 p-1 hover:text-red-500 translate-y-[15px]"
-                aria-label="Remove product"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+          <button
+            onClick={handleRemove}
+            className="ml-auto text-gray-500 p-1 hover:text-red-500 translate-y-[15px]"
+            aria-label="Remove product"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        )}
       </TableRow>
 
       {/* Popup Component */}
       {isPopupOpen && (
-        <Popup
-          isOpen={isPopupOpen}
-          togglePopup={togglePopup}
-          title={`${product.name} Details`}
-          content={`This is the content inside the popup for ${product.name}.`}
-        />
+        <Popup isOpen={isPopupOpen} togglePopup={togglePopup}>
+          <h2 className="text-xl font-semibold mb-4">{`${product.name} Details`}</h2>
+          <p>{`This is the content inside the popup for ${product.name}.`}</p>
+          {/* You can add more product details here */}
+        </Popup>
       )}
     </>
   );
 };
 
 export default ProductTableRow;
+
 
 
 
