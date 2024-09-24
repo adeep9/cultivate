@@ -62,6 +62,15 @@ const ProductTableRow: React.FC<ProductTableRowProps> = ({
         <TableCell>
           <Input
             className="bg-gray-100 text-center"
+            id={`${product.id}-unit`}
+            type="string"
+            value={product.unit}
+            readOnly
+          />
+        </TableCell>
+        <TableCell>
+          <Input
+            className="bg-gray-100 text-center"
             id={`${product.id}-price`}
             type="number"
             value={product.price}

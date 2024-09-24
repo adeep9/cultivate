@@ -1,3 +1,6 @@
+/**
+ * 
+ */
 // Import necessary libraries and components
 import React from 'react';
 import { Dualbar } from '../components/restaurantcomponents/dualbar';

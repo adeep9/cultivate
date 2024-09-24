@@ -22,17 +22,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-// Dummy data
-const dummyData: Product[] = [
-  { id: "1", name: "Tomato", price: 15 },
-  { id: "2", name: "Apples", price: 69 },
-  { id: "3", name: "Grapes", price: 20 },
-];
-
 export type Product = {
   id: string;
   name: string;
   price: number;
+  unit: string;
 };
 
 interface DataTableProps {
@@ -40,13 +34,88 @@ interface DataTableProps {
 }
 
 export const columns: ColumnDef<Product>[] = [
-  // ... your columns definitions
+  {
+    id: "select",
+    header: ({ table }) => (
+      <Checkbox
+        checked={
+          table.getIsAllPageRowsSelected() ||
+          (table.getIsSomePageRowsSelected() && "indeterminate")
+        }
+        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+        aria-label="Select all"
+        // Disable the checkbox in the header to enforce single selection
+        disabled={true}
+      />
+    ),
+    cell: ({ row, table }) => (
+      <Checkbox
+        checked={row.getIsSelected()}
+        onCheckedChange={() => {
+          // When a row is selected, clear all other selections first
+          table.toggleAllRowsSelected(false);
+          row.toggleSelected(true);
+        }}
+        aria-label="Select row"
+      />
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          type="button"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Product
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "price",
+    header: () => <div className="text-right">Price</div>,
+    cell: ({ row }) => {
+      const price = parseFloat(row.getValue("price"));
+
+      // Format the price as a dollar amount
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
+      }).format(price);
+
+      return <div className="text-right font-medium">{formatted}</div>;
+    },
+  },
 ];
 
 export function DataTableDemo({ onAddProduct }: DataTableProps) {
-  const [data] = React.useState<Product[]>(dummyData);
+  const [data, setData] = React.useState<Product[]>([]);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState<string>("");
+
+  //Retrive item information (products)
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/items'); // Adjust the endpoint as needed
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data: Product[] = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   // Filter data based on globalFilter
   const filteredData = React.useMemo(() => {
@@ -91,7 +160,7 @@ export function DataTableDemo({ onAddProduct }: DataTableProps) {
       </div>
 
       {/* Table */}
-      <div className="rounded-md border flex-grow overflow-auto">
+      <div className="rounded-md border flex-grow overflow-auto" style={{ maxHeight: '400px'}}>
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

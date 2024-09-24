@@ -4,11 +4,11 @@ import { Dualbar } from '../../components/restaurantcomponents/dualbar';
 import DeliveryPanel from '../../components/restaurantcomponents/parlevels';
 import Bids from '../../components/restaurantcomponents/activeorder';
 import Create from '../../components/restaurantcomponents/createorder';
-import CurrentOrder from '../../components/restaurantcomponents/currentorder';
+import CurrentOrder from '../../components/restaurantcomponents/pendingorder';
 import OrderList from '../../components/restaurantcomponents/orderlist';
 
 
-const OrdersPage = () => {
+const Fulfillments = () => {
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
@@ -48,4 +48,4 @@ const OrdersPage = () => {
   );
 };
 
-export default OrdersPage;
+export default Fulfillments;

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table";
 
 import ProductTableRow from './searchproductscomponent'; // Adjust the import path if necessary
-import { DataTableDemo, Product } from './DataTableDemo'; // Import DataTableDemo and Product type
+import { DataTableDemo, Product } from "./seachpopup";
 
 export type ProductWithVolume = Product & { volume: number };
 
@@ -73,8 +73,9 @@ export default function SearchProducts({ products, setProducts, readOnly = false
             <TableHeader>
               <TableRow>
                 <TableHead className="w-64">Product</TableHead>
-                <TableHead className="w-48">Price (Per Unit)</TableHead>
-                <TableHead className="w-36 lg:w-96">Volume</TableHead>
+                <TableHead className="w-36">Unit</TableHead>
+                <TableHead className="w-48">Price Each</TableHead>
+                <TableHead className="w-36 lg:w-96">Quantity</TableHead>
                 <TableHead className="w-48">Total Price</TableHead>
               </TableRow>
             </TableHeader>

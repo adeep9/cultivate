@@ -1,28 +1,30 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import SearchProducts, { ProductWithVolume } from './searchproducts';
 import { Calendar } from "@/components/ui/calendar";
+import Link from 'next/link';
 
 export default function OrderForm() {
-  // State to manage form steps and inputs
-  const [step, setStep] = useState<number>(1);
+  // State functions
+  const [step, setStep] = useState<number>(1); //control stage of form
   const [formData, setFormData] = useState<{
     orderDate: string;
-    orderTime: string;
     notes: string;
   }>({
     orderDate: '',
-    orderTime: '',
     notes: '',
   });
-
   const [date, setDate] = React.useState<Date | undefined>(new Date());
-
-  // State for products
   const [products, setProducts] = useState<ProductWithVolume[]>([]);
+
+  //Get restaurant information (id) from session data
+  const isLoggedIn = {
+    id: 1
+  }
+
 
   // Handle the date change from the calendar
   const handleDateChange = (selectedDate: Date | undefined) => {
@@ -31,10 +33,54 @@ export default function OrderForm() {
       setFormData((prevData) => ({
         ...prevData,
         orderDate: formattedDate,
-      }));
-      setDate(selectedDate);
+    }));
+    
+    setDate(selectedDate);
+    
     }
   };
+
+
+  //Function to handle par level input
+  const setDataParLevel = async () => {
+    //Make the data in the setState functions that same as par levels
+    try {
+      //Get par levels
+      const response = await fetch('/api/parlevels')
+      if (response.ok) {
+        const parlevelitems = await response.json();
+        if (parlevelitems) {
+          setProducts(parlevelitems)
+        }
+      } 
+            
+    } catch (error) {
+      console.error("Error retrieving par levels: ", error)
+    }
+  }
+
+  //Function to handle previous order input
+  const setDataPreviousOrder = async () => {
+    //Make the data in the setState functions the same as the previous order
+    try {
+      const response = await fetch('/api/prevorder', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: isLoggedIn.id }),  // Passing `id` as a JSON object
+      });
+
+      if (response.ok) {
+        const prevorderitems = await response.json();
+        if (prevorderitems) {
+          setProducts(prevorderitems)
+        }
+      }
+    } catch (error) {
+      console.error("Error retrieving prev order: ", error)
+    }
+  }
 
   // Function to handle input changes
   const handleChange = (
@@ -73,8 +119,10 @@ export default function OrderForm() {
       products: products,
     };
 
+    console.log(products)
+
     try {
-      const response = await fetch('/api/orders/submit', {
+      const response = await fetch('/api/createorder', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,18 +130,13 @@ export default function OrderForm() {
         body: JSON.stringify(orderData),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit order');
+      if (response.ok) {
+        alert('Order created successfully!');
+      } else {
+        alert('Failed to create order!');
       }
-
-      const result = await response.json();
-      console.log('Order submitted:', result);
-
-      // Advance to Step 4 after successful submission
-      setStep(4);
     } catch (error) {
-      console.error('Error submitting order:', error);
-      // Handle error (e.g., display error message to the user)
+      console.error('Error creating order:', error);
     }
   };
 
@@ -115,13 +158,15 @@ export default function OrderForm() {
             <div className='flex flex-row pt-8 gap-4 pb-6'>
               <button
                 type="button"
-                className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2'
+                onClick={setDataParLevel}
+                className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
               >
                 Par Levels
               </button>
               <button
                 type="button"
-                className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2'
+                onClick={setDataPreviousOrder}
+                className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
               >
                 Past Order
               </button>
@@ -132,16 +177,22 @@ export default function OrderForm() {
             {/* SearchProducts Component */}
             <div className='pt-6'>
               <SearchProducts products={products} setProducts={setProducts} />
-            </div>
 
-            {/* Button for next step */}
-            <div className='relative w-full h-full pt-24'>
-              <div className='flex flex-row justify-end absolute bottom-0 right-0'>
+              <div className='flex flex-row justify-end p-4'>
                 <Button type="button" variant={'default'} onClick={handleNext}>
                   Next
                 </Button>
               </div>
             </div>
+
+            {/* Button for next step */}
+            {/* <div className='relative w-full h-full pt-24'>
+              <div className='flex flex-row justify-end absolute bottom-0 right-0'>
+                <Button type="button" variant={'default'} onClick={handleNext}>
+                  Next
+                </Button>
+              </div>
+            </div> */}
           </div>
         )}
 
@@ -159,40 +210,31 @@ export default function OrderForm() {
             <div className="pt-10 flex justify-center">
               <div className="flex flex-row w-full max-w-4xl">
                 <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-8 mx-auto">
-                  {/* Date Section */}
-                  <div className="flex flex-col items-center md:items-start w-full">
-                    <h3 className="text-lg font-medium mb-2 text-center md:text-left">Select Date</h3>
-                    <input
-                      type="date"
-                      name="orderDate"
-                      className="h-8 w-full max-w-xs border bg-gray-50 rounded-md"
-                      value={formData.orderDate}
-                      onChange={handleChange}
-                      required
-                    />
-                    {/* Calendar Component */}
-                    <div className="pt-4">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={handleDateChange}
-                        className="rounded-md border max-w-xs"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Time and Notes Section */}
-                  <div className="flex flex-col items-center md:items-start w-full">
-                    <h3 className="text-lg font-medium mb-0 text-center md:text-left">Select Time</h3>
-                    <div className="pt-2">
+                  <div className="flex flex-row items-center md:items-start w-full">
+                    {/* Date Section */}
+                    <div className="px-10 ">
+                      <h3 className="text-lg font-medium mb-2 text-center md:text-left">Select Date</h3>
                       <input
-                        type="time"
-                        name="orderTime"
-                        className="bg-slate-50 p-1 border h-8 border-gray-200 rounded-md w-48"
-                        value={formData.orderTime}
+                        type="date"
+                        name="orderDate"
+                        className="h-8 w-full max-w-xs border bg-gray-50 rounded-md"
+                        value={formData.orderDate}
                         onChange={handleChange}
                         required
                       />
+                      {/* Calendar Component */}
+                      <div className="">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={handleDateChange}
+                          className="rounded-md border max-w-xs"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Time and Notes Section */}
+                    <div className="flex flex-col items-center md:items-start w-full">
                       <h3 className="text-lg font-medium pt-6 mb-2 text-center md:text-left">Additional Notes</h3>
                       <textarea
                         name="notes"
@@ -202,7 +244,7 @@ export default function OrderForm() {
                         placeholder="Enter any additional notes here..."
                       />
                     </div>
-                  </div>
+                  </div>                  
                 </div>
               </div>
             </div>
@@ -244,9 +286,6 @@ export default function OrderForm() {
                     <strong>Date:</strong> {formData.orderDate}
                   </div>
                   <div>
-                    <strong>Time:</strong> {formData.orderTime}
-                  </div>
-                  <div>
                     <strong>Notes:</strong> {formData.notes || 'No additional notes.'}
                   </div>
                 </div>
@@ -266,8 +305,14 @@ export default function OrderForm() {
 
         {/* Step 4: Thank You Message */}
         {step === 4 && (
-          <div className="flex items-center justify-center h-full">
-            <h2 className="text-4xl font-bold text-center">Thank you, order received</h2>
+          <div className="flex flex-col items-center justify-center h-full">
+            <h2 className="text-4xl font-bold text-center p-10">Order Submitted</h2>
+            <h4 className="text-md font-medium mb-2 p-4">We will notify you when the order is accepted by a supplier</h4>
+            <Link href="./orders">
+              <Button type="button" variant={'outline'}>
+                View Orders
+              </Button>
+            </Link>
           </div>
         )}
       </form>

@@ -10,28 +10,27 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function Create() {
+export default function CreateParLevel() {
 
   //Get logged in user from session data
   //This user will be a restaurant 
 
-  const loggedIn = {name: "Gnocchi Gnocchi Springhill"}
+  const loggedIn = {id: 1}
 
 
   return (
     <Card className="sm:col-span-2">
       <CardHeader className="pb-3">
-        <CardTitle>Welcome back, <b>{loggedIn.name}</b></CardTitle>
+        <CardTitle>Need to change your par levels?</CardTitle>
         <CardDescription className="text-balance max-w-lg leading-relaxed">
-          Lets get started with a new order to your supplier!
+          It's as easy as putting an order through!
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href="/restaurant/createorder">
-          <Button>Create New Order</Button>
+        <Link href="/restaurant/updateparlevels">
+          <Button>Update Par Levels</Button>
         </Link>
       </CardFooter>
     </Card>
   )
 }
-

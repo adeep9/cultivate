@@ -23,10 +23,10 @@ export function Sidebar() {
         <div className="w-full h-full">
           <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Main </p>
           <div className="pt-4">
-            <Buttontile label="Home" href="/dashboard" Icon={HomeIcon} />
-            <Buttontile label="Orders" href="/orders" Icon={OrderIcon} />
-            <Buttontile label="Fullfillment" href="/fullfillments" Icon={PaymentIcon} />
-            <Buttontile label="Payments" href="/paymnets" Icon={PaymentIcon} />
+            <Buttontile label="Home" href="/sdashboard" Icon={HomeIcon} />
+            <Buttontile label="Orders" href="/supplier/orders" Icon={OrderIcon} />
+            <Buttontile label="Fullfillment" href="/supplier/fulfillments" Icon={PaymentIcon} />
+            <Buttontile label="Contact" href="/contact" Icon={PaymentIcon} />
           </div>
           <div className="mt-52 translate-y-48">
             <Account />

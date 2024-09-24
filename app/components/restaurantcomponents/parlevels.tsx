@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function Component({ className = "" }) {
+export default function ParLevels({ className = "" }) {
   return (
     <Card className={className}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -17,8 +17,9 @@ export default function Component({ className = "" }) {
         <CreditCard className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">Active</div>
-        <p className="text-xs text-muted-foreground pt-12">Upload Par-Levels to make ordering faster</p>
+        <div className="text-2xl font-bold">Uploaded</div>
+        <p className="text-xs text-muted-foreground pt-12">Need to edit your par levels?</p>
+        {/* <p className="text-xs text-muted-foreground pt-12">Upload Par-Levels to make ordering faster</p> */}
       </CardContent>
     </Card>
   )

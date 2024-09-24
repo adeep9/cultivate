@@ -8,36 +8,47 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model Restaurant {
-  id       Int     @id @default(autoincrement())
-  name     String
-  email    String  @unique
-  phone    String  @unique
-  password String
-  orders   Order[]
-}
-
 model Supplier {
-  id       Int     @id @default(autoincrement())
-  name     String
-  email    String  @unique
-  phone    String  @unique
-  password String
-  orders   Order[]
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  phone        String   @unique
+  address1     String
+  city         String
+  state        String
+  postcode     Int
+  country      String
+  password     String
+  createdAt    DateTime @default(now())
+  loggedInLast DateTime
+  orders       Order[]
 }
 
-model Item {
-  id     Int         @id @default(autoincrement())
-  name   String
-  price  Float
-  orders OrderItem[]
+model Restaurant {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  phone        String   @unique
+  address1     String
+  city         String
+  state        String
+  postcode     Int
+  country      String
+  password     String
+  createdAt    DateTime @default(now())
+  loggedInLast DateTime
+  orders       Order[]
+  parLevels    ParLevel[]
 }
 
 model Order {
   id           Int         @id @default(autoincrement())
   restaurantId Int
   supplierId   Int?
+  notes        String?
+  dateDue      DateTime?
   createdAt    DateTime    @default(now())
+  lastUpdated  DateTime    @updatedAt
   status       String      @default("Pending")
   restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
   supplier     Supplier?   @relation(fields: [supplierId], references: [id])
@@ -51,4 +62,30 @@ model OrderItem {
   quantity Int
   item     Item  @relation(fields: [itemId], references: [id])
   order    Order @relation(fields: [orderId], references: [id])
+}
+
+model Item {
+  id     Int         @id @default(autoincrement())
+  name   String
+  price  Float
+  unit   String
+  orders OrderItem[]
+  parLevelItems ParLevelItem[]
+}
+
+model ParLevel {
+  id           Int        @id @default(autoincrement())
+  restaurantId Int
+  createdAt    DateTime   @default(now())
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  items        ParLevelItem[]
+}
+
+model ParLevelItem {
+  id        Int   @id @default(autoincrement())
+  parLevelId Int
+  itemId    Int
+  quantity  Int
+  item      Item  @relation(fields: [itemId], references: [id])
+  parLevel  ParLevel @relation(fields: [parLevelId], references: [id])
 }

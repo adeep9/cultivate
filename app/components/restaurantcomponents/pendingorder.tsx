@@ -9,7 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function CurrentOrder({ className = "" }) {
+export default function PendingOrders({ className = "" }) {
+  //Get number of active orders
+  const orders = {
+    pending: 2,
+  }
+
   return (
     <Card className={className}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -17,8 +22,8 @@ export default function CurrentOrder({ className = "" }) {
         <Users className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">2</div>
-        <p className="text-xs text-muted-foreground pt-12">Currently on our market but not fullfilled</p>
+        <div className="text-2xl font-bold">{orders.pending}</div>
+        <p className="text-xs text-muted-foreground pt-12">Sent to supplier, but not yet fullfilled</p>
       </CardContent>
     </Card>
   )

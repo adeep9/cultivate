@@ -1,10 +1,7 @@
 "use client"
 
 import {
-  ChevronLeft,
-  ChevronRight,
   Copy,
-  CreditCard,
   MoreVertical,
   Truck,
 } from "lucide-react"
@@ -13,8 +10,8 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -25,20 +22,183 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-} from "@/components/ui/pagination"
 import { Separator } from "@/components/ui/separator"
+import { useEffect, useState } from "react"
+import DocketItem from "./DocketItem"
 
-export default function Docket() {
+import { OrderItemProps } from "./DocketItem"
+
+interface Order {
+  createdAt: Date;
+  dateDue: Date;
+  id: number;
+  lastUpdated: Date;
+  notes: string;
+  restaurantId: number;
+  status: string;
+  supplierId: number;
+}
+
+interface Restaurant {
+  name: string;
+  email: string;
+  id: number;
+  phone: string;
+  address1: string;
+  city: string;
+  state: string;
+  postcode: number;
+  country: string;
+}
+
+interface Supplier {
+  name: string;
+  email: string;
+  id: number;
+  phone: string;
+}
+
+interface DocketProps {
+  orderId: number
+}
+
+export default function Docket({orderId}: DocketProps) {
+
+  const [order, setOrder] = useState<Order | null>(null);
+  const [restaurantData, setRestaurantData] = useState<Restaurant | null>(null);
+  const [supplierData, setSupplierData] = useState<Supplier | null>(null);
+  const [orderItemsArray, setOrderItemsArray] = useState<OrderItemProps[]>([]);
+  const [totalItems, setTotalItems] = useState(0)
+  const [totalPrice, setTotalPrice] = useState(0)
+
+  useEffect(() => {
+    // Function to fetch order information
+    const findOrder = async () => {
+      try {
+        const response = await fetch('/api/order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: orderId }),  // Passing `id` as a JSON object
+        });
+
+        if (!response.ok) {
+          console.error('Error retrieving order');
+          return;
+        }
+
+        const data: Order = await response.json();  // Parse response JSON
+        setOrder(data)
+
+      } catch (error) {
+        console.error('Error fetching order:', error);
+      }
+    };
+
+    findOrder(); // Run `findOrder` on component mount
+  }, [])
+
+  useEffect(() => {
+    //Get restaurant information
+    //Name, email, phone and address
+    const getRestaurantData = async () => {
+      if (!order) return;
+
+      if (order.restaurantId) {
+        const response = await fetch('/api/restaurant', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: order.restaurantId }),  // Passing `id` as a JSON object
+        });
+
+        if (!response.ok) {
+          console.error('Error retrieving restaurant data');
+          return;
+        }
+
+        const data = await response.json();  // Parse response JSON
+        setRestaurantData(data)
+        console.log(restaurantData)
+      }
+    };
+    getRestaurantData(); //call function
+
+    //Get supplier information
+    //Name, email and phone
+    const getSupplierData = async () => {
+      if (!order) return;
+
+      if (order.supplierId) {
+        const response = await fetch('/api/supplier', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: order.supplierId }),  // Passing `id` as a JSON object
+        });
+
+        if (!response.ok) {
+          console.error('Error retrieving supplier data');
+          return;
+        }
+
+        const data = await response.json();  // Parse response JSON
+        setSupplierData(data)
+        console.log(supplierData)
+      }
+    };
+    getSupplierData(); //call function
+
+
+    //Get order item array
+    const getOrderItemArray = async () => {
+      if (!order) return;
+
+      if (order.id) {
+        const response = await fetch('/api/orderitems', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: order.id }),  // Passing `id` as a JSON object
+        });
+
+        if (!response.ok) {
+          console.error('Error retrieving order items');
+          return;
+        }
+
+        const data = await response.json();  // Parse response JSON
+        setOrderItemsArray(data)
+      }
+    };
+    getOrderItemArray(); //call function
+
+  }, [order])
+
+  useEffect(() => {
+    // Count the total number of items
+    const itemTotal = orderItemsArray.reduce((accumulator, item) => {
+      return accumulator + item.quantity;
+    }, 0);
+    setTotalItems(itemTotal);
+
+    const priceTotal = orderItemsArray.reduce((accumulator, item) => {
+      return accumulator + item.price*item.quantity;
+    }, 0);
+    setTotalPrice(priceTotal);
+
+  }, [orderItemsArray]);
+    
   return (
     <Card className="overflow-hidden min-w-96">
       <CardHeader className="flex flex-row items-start bg-muted/50">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
-            Order Oe31b70H
+            Order #{order ? order.id : "Loading..."}
             <Button
               size="icon"
               variant="outline"
@@ -48,7 +208,7 @@ export default function Docket() {
               <span className="sr-only">Copy Order ID</span>
             </Button>
           </CardTitle>
-          <CardDescription>Date: November 23, 2023</CardDescription>
+          <CardDescription>Due Date: {new Date(order ? order.dateDue : "Loading Order Creation Date").toLocaleDateString()}</CardDescription>
         </div>
         <div className="ml-auto flex items-center gap-1">
           <Button size="sm" variant="outline" className="h-8 gap-1">
@@ -66,9 +226,9 @@ export default function Docket() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Export</DropdownMenuItem>
+              <DropdownMenuItem>Print</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Trash</DropdownMenuItem>
+              <DropdownMenuItem>Delete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -76,37 +236,30 @@ export default function Docket() {
       <CardContent className="p-6 text-sm">
         <div className="grid gap-3">
           <div className="font-semibold">Order Details</div>
+
           <ul className="grid gap-3">
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Glimmer Lamps x <span>2</span>
-              </span>
-              <span>$250.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                Aqua Filters x <span>1</span>
-              </span>
-              <span>$49.00</span>
-            </li>
+            {orderItemsArray ?
+              orderItemsArray.map((orderItem) => 
+              <DocketItem orderItem={orderItem} />
+              ) : "Order Items" }
           </ul>
+
           <Separator className="my-2" />
           <ul className="grid gap-3">
             <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">Subtotal</span>
-              <span>$299.00</span>
+              <span className="text-muted-foreground">Unique Items</span>
+              {/** Calculate Num of Items */}
+              <span>{orderItemsArray.length}</span>
             </li>
             <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">Shipping</span>
-              <span>$5.00</span>
-            </li>
-            <li className="flex items-center justify-between">
-              <span className="text-muted-foreground">Tax</span>
-              <span>$25.00</span>
+              <span className="text-muted-foreground">Total Items</span>
+              {/** Calculate Num of Items */}
+              <span>{totalItems}</span>
             </li>
             <li className="flex items-center justify-between font-semibold">
-              <span className="text-muted-foreground">Total</span>
-              <span>$329.00</span>
+              <span className="text-muted-foreground">Total Price</span>
+              {/** Calculate Sum of items */}
+              <span>{totalPrice}</span>
             </li>
           </ul>
         </div>
@@ -115,9 +268,11 @@ export default function Docket() {
           <div className="grid gap-3">
             <div className="font-semibold">Shipping Information</div>
             <address className="grid gap-0.5 not-italic text-muted-foreground">
-              <span>Liam Johnson</span>
-              <span>1234 Main St.</span>
-              <span>Anytown, CA 12345</span>
+              <span>{restaurantData ? restaurantData.address1 : "Address 1"}</span>
+              <span>{restaurantData ? 
+                `${restaurantData.city}, ${restaurantData.state} ${restaurantData.postcode}` 
+                : "Address 2"}
+              </span>
             </address>
           </div>
           <div className="grid auto-rows-max gap-3">
@@ -129,60 +284,59 @@ export default function Docket() {
         </div>
         <Separator className="my-4" />
         <div className="grid gap-3">
-          <div className="font-semibold">Customer Information</div>
+          <div className="font-semibold">Restaurant Information</div>
           <dl className="grid gap-3">
             <div className="flex items-center justify-between">
-              <dt className="text-muted-foreground">Customer</dt>
-              <dd>Liam Johnson</dd>
+              <dt className="text-muted-foreground">Name</dt>
+              <dd>{restaurantData ? restaurantData.name : "Name"}</dd>
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-muted-foreground">Email</dt>
               <dd>
-                <a href="mailto:">liam@acme.com</a>
+                <a href="mailto:">{restaurantData ? restaurantData.email : "Email"}</a>
               </dd>
             </div>
             <div className="flex items-center justify-between">
               <dt className="text-muted-foreground">Phone</dt>
               <dd>
-                <a href="tel:">+1 234 567 890</a>
+                <a href="tel:">{restaurantData ? restaurantData.phone : "Phone"}</a>
               </dd>
             </div>
           </dl>
         </div>
         <Separator className="my-4" />
         <div className="grid gap-3">
-          <div className="font-semibold">Payment Information</div>
+          <div className="font-semibold">Supplier Information</div>
           <dl className="grid gap-3">
-            <div className="flex items-center justify-between">
-              <dt className="flex items-center gap-1 text-muted-foreground">
-                <CreditCard className="h-4 w-4" />
-                Visa
-              </dt>
-              <dd>**** **** **** 4532</dd>
-            </div>
+            {order ?
+              order.supplierId ?
+              <>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Name</dt>
+                  <dd>{supplierData ? supplierData.name : "Supplier Name"}</dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Email</dt>
+                  <dd>
+                    <a href="mailto:">{supplierData ? supplierData.email : "Supplier Email"}</a>
+                  </dd>
+                </div>
+                <div className="flex items-center justify-between">
+                  <dt className="text-muted-foreground">Phone</dt>
+                  <dd>
+                    <a href="tel:">{supplierData ? supplierData.phone : "Supplier Phone"}</a>
+                  </dd>
+                </div> 
+              </>
+              : <p className="text-red-500">No supplier has accepted this order yet</p>
+            : "Loading supplier information..."}
           </dl>
         </div>
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
         <div className="text-xs text-muted-foreground">
-          Updated <time dateTime="2023-11-23">November 23, 2023</time>
+          <p>Created at: {new Date(order ? order.createdAt : "Loading Order Creation Date").toLocaleDateString()}</p>
         </div>
-        <Pagination className="ml-auto mr-0 w-auto">
-          <PaginationContent>
-            <PaginationItem>
-              <Button size="icon" variant="outline" className="h-6 w-6">
-                <ChevronLeft className="h-3.5 w-3.5" />
-                <span className="sr-only">Previous Order</span>
-              </Button>
-            </PaginationItem>
-            <PaginationItem>
-              <Button size="icon" variant="outline" className="h-6 w-6">
-                <ChevronRight className="h-3.5 w-3.5" />
-                <span className="sr-only">Next Order</span>
-              </Button>
-            </PaginationItem>
-          </PaginationContent>
-        </Pagination>
       </CardFooter>
     </Card>
   )
