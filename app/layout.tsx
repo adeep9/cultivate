@@ -15,10 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.className}`}>
-      <body className={inter.className}>
+    // Add the `dark` class to enforce dark mode by default
+    <html lang="en" className={`light ${inter.className}`}>
+      {/* Set the body background color to #FFFCFB and apply font styles */}
+      <body className={inter.className} style={{ backgroundColor: '#FFFCFB' }}>
         {children}
       </body>
     </html>
   );
 }
+

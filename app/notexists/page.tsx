@@ -9,7 +9,7 @@ const Exists = () => {
                 <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
                     User does not exist!
                 </p>
-                <Link href="/signup">
+                <Link href="/">
                 <button
                     className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
                     Sign Up
