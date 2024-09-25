@@ -1,6 +1,7 @@
 "use client"
 
 import {
+  Check,
   Copy,
   MoreVertical,
   Truck,
@@ -27,6 +28,9 @@ import { useEffect, useState } from "react"
 import DocketItem from "./DocketItem"
 
 import { OrderItemProps } from "./DocketItem"
+
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 interface Order {
   createdAt: Date;
@@ -60,9 +64,10 @@ interface Supplier {
 
 interface DocketProps {
   orderId: number
+  supplier?: boolean;
 }
 
-export default function Docket({orderId}: DocketProps) {
+export default function Docket({orderId, supplier = false}: DocketProps) {
 
   const [order, setOrder] = useState<Order | null>(null);
   const [restaurantData, setRestaurantData] = useState<Restaurant | null>(null);
@@ -70,6 +75,8 @@ export default function Docket({orderId}: DocketProps) {
   const [orderItemsArray, setOrderItemsArray] = useState<OrderItemProps[]>([]);
   const [totalItems, setTotalItems] = useState(0)
   const [totalPrice, setTotalPrice] = useState(0)
+
+  const router = useRouter();
 
   useEffect(() => {
     // Function to fetch order information
@@ -182,16 +189,40 @@ export default function Docket({orderId}: DocketProps) {
   useEffect(() => {
     // Count the total number of items
     const itemTotal = orderItemsArray.reduce((accumulator, item) => {
-      return accumulator + item.quantity;
+      return accumulator + item.volume;
     }, 0);
     setTotalItems(itemTotal);
 
     const priceTotal = orderItemsArray.reduce((accumulator, item) => {
-      return accumulator + item.price*item.quantity;
+      return accumulator + item.price*item.volume;
     }, 0);
     setTotalPrice(priceTotal);
 
   }, [orderItemsArray]);
+
+  //Function edit order
+  const editOrder = () => {
+    //push to edit page with id 
+    router.push(`/restaurant/orders/${order?.id}/${order?.id}`)
+    
+  }
+
+  //Function to delete order
+  const deleteOrder = () => {
+    //Double check
+
+    //Delete from database
+
+    //Push to orders page
+  }
+
+  const cancelOrder = () => {
+    //Cancel 
+  }
+
+  const printOrder = () => {
+    //Print function
+  }
     
   return (
     <Card className="overflow-hidden min-w-96">
@@ -211,12 +242,14 @@ export default function Docket({orderId}: DocketProps) {
           <CardDescription>Due Date: {new Date(order ? order.dateDue : "Loading Order Creation Date").toLocaleDateString()}</CardDescription>
         </div>
         <div className="ml-auto flex items-center gap-1">
-          <Button size="sm" variant="outline" className="h-8 gap-1">
-            <Truck className="h-3.5 w-3.5" />
-            <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
-              Track Order
-            </span>
-          </Button>
+          {supplier && (
+            <Button size="sm" variant="outline" className="h-8 gap-1 bg-green-500 text-white hover:bg-green-600">
+              <Check className="h-3.5 w-3.5" />
+              <span className="lg:sr-only xl:not-sr-only xl:whitespace-nowrap">
+                Accept order
+              </span>
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="icon" variant="outline" className="h-8 w-8">
@@ -225,10 +258,54 @@ export default function Docket({orderId}: DocketProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Print</DropdownMenuItem>
+              {!supplier && (
+                <DropdownMenuItem>
+                  <Button 
+                  type="button" 
+                  onClick={editOrder} 
+                  variant={"outline"}
+                  className="w-full"
+                  >
+                    Edit
+                  </Button>
+                </DropdownMenuItem>
+              )}
+              
+              <DropdownMenuItem>
+                <Button 
+                type="button" 
+                onClick={printOrder} 
+                variant={"outline"}
+                className="w-full"
+                >
+                  Print
+                </Button>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Delete</DropdownMenuItem>
+              {supplier ? (
+                <DropdownMenuItem>
+                  <Button 
+                  type="button" 
+                  onClick={deleteOrder} 
+                  variant={"outline"}
+                  className="w-full bg-red-300"
+                  >
+                    Cancel
+                  </Button>
+                </DropdownMenuItem>
+              ) : (
+                <DropdownMenuItem>
+                  <Button 
+                  type="button" 
+                  onClick={deleteOrder} 
+                  variant={"outline"}
+                  className="w-full bg-red-300"
+                  >
+                    Delete
+                  </Button>
+                </DropdownMenuItem>
+              )}
+              
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -1,18 +1,21 @@
 // Import necessary libraries and components
-import React from 'react';
-import { Dualbar } from '../../components/restaurantcomponents/dualbar';
-import DeliveryPanel from '../../components/restaurantcomponents/parlevels';
-import Bids from '../../components/restaurantcomponents/activeorder';
-import Create from '../../components/restaurantcomponents/createorder';
-import CurrentOrder from '../../components/restaurantcomponents/pendingorder';
-import OrderList from '../../components/restaurantcomponents/orderlist';
-
+import SupplierActiveOrders from '@/app/components/suppliercomponents/SupplierActiveOrders';
+import { SupplierDualbar } from '@/app/components/suppliercomponents/SupplierDualbar';
+import SupplierOrderHeader from '@/app/components/suppliercomponents/SupplierOrderHeader';
+import SupplierPendingOrders from '@/app/components/suppliercomponents/SupplierPendingOrders';
+import SupplierOrderList from '@/app/components/suppliercomponents/SupplierOrderList';
 
 const OrdersPage = () => {
+  //get usupplier info from session data
+
+  const isLoggedIn = {
+    id: 1,
+  }
+
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
-      <Dualbar />
+      <SupplierDualbar />
 
       {/* Main Content Area for All Screens */}
       <div className="orders-page flex flex-col justify-start w-full p-6">
@@ -27,20 +30,19 @@ const OrdersPage = () => {
 
         <div className="pt-4">
           <div className="w-full h-full border bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-900 border-gray-300 rounded-xl p-1">
-            <Create />
+            <SupplierOrderHeader/>
           </div>
         </div>
 
         {/* Bottom Section Below the Line (Always Visible) */}
         <div className="w-full mt-4 flex flex-col md:flex-row gap-4">
           {/* Each Bids component will take equal space in a row format */}
-          <Bids className="flex-1" />
-          <DeliveryPanel className="flex-1" />
-          <CurrentOrder className="flex-1"/>
+          <SupplierActiveOrders className="flex-1" id={isLoggedIn.id} />
+          <SupplierPendingOrders className="flex-1" id={isLoggedIn.id} />
         </div>
 
         <div className='pt-4'>
-          <OrderList/>
+          <SupplierOrderList id={isLoggedIn.id}/>
         </div>
 
       </div>

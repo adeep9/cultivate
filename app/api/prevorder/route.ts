@@ -1,17 +1,27 @@
-/**
- * API Route for getting the previous order by a particular restaurant
- * Called by individual order pages
- * This just reduces the amount of info in the url bar
- */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
-    const { id } = await request.json();
   try {
-    // Fetch all unique items based on the 'name', returning both 'name' and 'price'
-    const orderData = await prisma.order.findUnique({ where: { id }})
-    return NextResponse.json(orderData);
+    const { id } = await request.json(); // restaurantId
+
+    // Fetch the latest order by sorting by createdAt in descending order
+    const latestOrder = await prisma.order.findFirst({
+      where: { 
+        restaurantId: id 
+      },
+      orderBy: {
+        createdAt: 'desc', // Sort by createdAt in descending order
+      },
+    });
+
+    // Check if an order was found
+    if (!latestOrder) {
+      return NextResponse.json({ message: 'No orders found' }, { status: 404 });
+    }
+
+    // Return the orderId of the newest order
+    return NextResponse.json({ orderId: latestOrder.id });
 
   } catch (error) {
     console.error('Error fetching order:', error); // Log the error to debug

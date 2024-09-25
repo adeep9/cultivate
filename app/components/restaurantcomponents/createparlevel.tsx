@@ -27,7 +27,7 @@ export default function CreateParLevel() {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href="/restaurant/updateparlevels">
+        <Link href="/restaurant/parlevels/createpar">
           <Button>Update Par Levels</Button>
         </Link>
       </CardFooter>

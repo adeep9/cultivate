@@ -6,9 +6,12 @@ import { Button } from '@/components/ui/button';
 import SearchProducts, { ProductWithVolume } from './searchproducts';
 import { Calendar } from "@/components/ui/calendar";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function OrderForm() {
   // State functions
+  const router = useRouter();
+
   const [step, setStep] = useState<number>(1); //control stage of form
   const [formData, setFormData] = useState<{
     orderDate: string;
@@ -20,11 +23,16 @@ export default function OrderForm() {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [products, setProducts] = useState<ProductWithVolume[]>([]);
 
+  const [dateChanged, setDateChanged] = useState(false)
+
+  const [parLoading, setParLoading] = useState(false)
+  const [prevLoading, setPrevLoading] = useState(false)
+  const [clearLoading, setClearLoading] = useState(false)
+
   //Get restaurant information (id) from session data
   const isLoggedIn = {
     id: 1
   }
-
 
   // Handle the date change from the calendar
   const handleDateChange = (selectedDate: Date | undefined) => {
@@ -36,33 +44,60 @@ export default function OrderForm() {
     }));
     
     setDate(selectedDate);
+    setDateChanged(true);
     
     }
   };
 
+  //Function to clear all the prducts
+  const clearProducts = () => {
+    setClearLoading(true)
+    try {
+      setProducts([])
+    } catch (error) {
+      console.error("Error clearing products: ", error)
+    } finally {
+      setClearLoading(false)
+    }
+  }
 
   //Function to handle par level input
   const setDataParLevel = async () => {
+    setParLoading(true)
     //Make the data in the setState functions that same as par levels
     try {
       //Get par levels
-      const response = await fetch('/api/parlevels')
+      const response = await fetch('/api/parlevels', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: isLoggedIn.id,
+        })
+      });
+
       if (response.ok) {
         const parlevelitems = await response.json();
         if (parlevelitems) {
           setProducts(parlevelitems)
+        } else {
+          alert('No Par Levels');
         }
-      } 
-            
+      }             
     } catch (error) {
       console.error("Error retrieving par levels: ", error)
+    } finally {
+      setParLoading(false)
     }
   }
 
   //Function to handle previous order input
   const setDataPreviousOrder = async () => {
+    setPrevLoading(true)
     //Make the data in the setState functions the same as the previous order
     try {
+      //This will return the orderId of the previous order, if it exists
       const response = await fetch('/api/prevorder', {
         method: 'POST',
         headers: {
@@ -72,13 +107,39 @@ export default function OrderForm() {
       });
 
       if (response.ok) {
-        const prevorderitems = await response.json();
-        if (prevorderitems) {
-          setProducts(prevorderitems)
+        const { orderId } = await response.json();
+        if (!orderId) {
+          alert('No Previous Orders');
+          return;
+        }
+        console.log("Order ID: ", orderId)
+        //Find items from orderId
+        try {
+          const response = await fetch('/api/orderitems', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id:orderId}),  // Passing `id` as a JSON object
+          });
+
+          if (response.ok) {
+            const orderitems = await response.json();
+            if (!orderitems) {
+              alert('No Previous Order Items');
+              return;
+            }
+            console.log("Order Items:", orderitems)
+            setProducts(orderitems)
+          }
+        } catch (error) {
+          console.error("Error retrieving prev order Items: ", error)
         }
       }
     } catch (error) {
-      console.error("Error retrieving prev order: ", error)
+      console.error("Error retrieving prev order ID: ", error)
+    } finally {
+      setPrevLoading(false)
     }
   }
 
@@ -119,8 +180,6 @@ export default function OrderForm() {
       products: products,
     };
 
-    console.log(products)
-
     try {
       const response = await fetch('/api/createorder', {
         method: 'POST',
@@ -132,13 +191,26 @@ export default function OrderForm() {
 
       if (response.ok) {
         alert('Order created successfully!');
+        router.push('createorder/success')
       } else {
         alert('Failed to create order!');
       }
+
     } catch (error) {
       console.error('Error creating order:', error);
     }
   };
+  
+  //Handle bad submit. Either no date or no products
+  const handleBadSubmit = () => {
+    if (!dateChanged && products.length === 0) {
+      alert('Orders must have a date and products');
+    } else if (products.length === 0) {
+      alert('Orders must have products');
+    } else {
+      alert('Orders must have a date');
+    }
+  }
 
   return (
     <main className="w-full h-full min-w-[400px] p-8 bg-white rounded-xl border border-gray-300">
@@ -156,20 +228,73 @@ export default function OrderForm() {
 
             {/* Column of two buttons */}
             <div className='flex flex-row pt-8 gap-4 pb-6'>
-              <button
-                type="button"
-                onClick={setDataParLevel}
-                className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
-              >
-                Par Levels
-              </button>
-              <button
-                type="button"
-                onClick={setDataPreviousOrder}
-                className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
-              >
-                Past Order
-              </button>
+              {parLoading ? (
+                  <button
+                    type="button"
+                    onClick={setDataParLevel}
+                    disabled
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                  >
+                    <div className="flex flex-row">
+                      <div className="loader"/>
+                      <p className="pl-3">Par Levels</p>
+                    </div>
+                  </button>
+                  
+                ) : (
+                  <button
+                    type="button"
+                    onClick={setDataParLevel}
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                  >
+                    <p className="">Par Levels</p>
+                  </button>
+                )}
+                {prevLoading ? (
+                  <button
+                    type="button"
+                    onClick={setDataPreviousOrder}
+                    disabled
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                  >
+                    <div className="flex flex-row">
+                      <div className="loader"/>
+                      <p className="pl-3">Previous Orders</p>
+                    </div>
+                  </button>
+                  
+                ) : (
+                  <button
+                    type="button"
+                    onClick={setDataPreviousOrder}
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                  >
+                    <p className="">Previous Orders</p>
+                  </button>
+                )}
+                {clearLoading ? (
+                  <button
+                    type="button"
+                    onClick={clearProducts}
+                    disabled
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                  >
+                    <div className="flex flex-row">
+                      <div className="loader"/>
+                      <p className="pl-3">Clear</p>
+                    </div>
+                  </button>
+                  
+                ) : (
+                  <button
+                    type="button"
+                    onClick={clearProducts}
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                  >
+                    <p className="">Clear</p>
+                  </button>
+                )}
+              
             </div>
 
             <hr />
@@ -184,15 +309,6 @@ export default function OrderForm() {
                 </Button>
               </div>
             </div>
-
-            {/* Button for next step */}
-            {/* <div className='relative w-full h-full pt-24'>
-              <div className='flex flex-row justify-end absolute bottom-0 right-0'>
-                <Button type="button" variant={'default'} onClick={handleNext}>
-                  Next
-                </Button>
-              </div>
-            </div> */}
           </div>
         )}
 
@@ -226,6 +342,7 @@ export default function OrderForm() {
                       <div className="">
                         <Calendar
                           mode="single"
+                          required
                           selected={date}
                           onSelect={handleDateChange}
                           className="rounded-md border max-w-xs"
@@ -283,10 +400,16 @@ export default function OrderForm() {
                 <h4 className="text-md font-medium mb-2">Order Information</h4>
                 <div className="flex flex-col space-y-2">
                   <div>
-                    <strong>Date:</strong> {formData.orderDate}
+                    <strong>Date: </strong> 
+                    {dateChanged ? (
+                      formData.orderDate
+                    ) : (
+                      <span className="text-red-500">You must include a date.</span>
+                    )}
+
                   </div>
                   <div>
-                    <strong>Notes:</strong> {formData.notes || 'No additional notes.'}
+                    <strong>Notes:</strong> {formData.notes || 'No notes added'}
                   </div>
                 </div>
               </div>
@@ -296,9 +419,15 @@ export default function OrderForm() {
               <Button type="button" variant={'outline'} onClick={handleBack} className="absolute bottom-0 left-0 p-4">
                 Back
               </Button>
-              <Button type="submit" variant={'default'} className="absolute bottom-0 right-0 p-4">
-                Submit
-              </Button>
+              {dateChanged && products.length ? (
+                <Button type="submit" variant={'default'} className="absolute bottom-0 right-0 p-4">
+                  Submit
+                </Button>
+              ) : (
+                <Button type="button" onClick={handleBadSubmit} variant={'outline'} className="absolute bottom-0 right-0 p-4">
+                  Submit
+                </Button>
+              )}
             </div>
           </div>
         )}

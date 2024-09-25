@@ -6,7 +6,7 @@ import Orderform from '../../components/restaurantcomponents/orderform';
 
 
 
-const DashboardPage = () => {
+const CreateOrderPage = () => {
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
@@ -36,4 +36,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default CreateOrderPage;

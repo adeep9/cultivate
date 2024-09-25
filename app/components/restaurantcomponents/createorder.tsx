@@ -21,13 +21,13 @@ export default function Create() {
   return (
     <Card className="sm:col-span-2">
       <CardHeader className="pb-3">
-        <CardTitle>Welcome back, <b>{loggedIn.name}</b></CardTitle>
+        <CardTitle className="text-balance max-w-xl leading-relaxed">Welcome back, <span className="font-extrabold">{loggedIn.name}</span></CardTitle>
         <CardDescription className="text-balance max-w-lg leading-relaxed">
           Lets get started with a new order to your supplier!
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href="/restaurant/createorder">
+        <Link href="createorder">
           <Button>Create New Order</Button>
         </Link>
       </CardFooter>

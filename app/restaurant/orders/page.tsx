@@ -1,14 +1,19 @@
 // Import necessary libraries and components
-import React from 'react';
 import { Dualbar } from '../../components/restaurantcomponents/dualbar';
 import Create from '../../components/restaurantcomponents/createorder';
 import OrderList from '../../components/restaurantcomponents/orderlist';
 import ActiveOrders from '../../components/restaurantcomponents/activeorder';
 import ParLevels from '../../components/restaurantcomponents/parlevels';
 import PendingOrders from '../../components/restaurantcomponents/pendingorder';
-
+import Link from 'next/link';
 
 const OrdersPage = () => {
+
+  //Find logged in restaurant info from session data
+  const isLoggedIn = {
+    id: 1
+  }
+
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
@@ -34,13 +39,13 @@ const OrdersPage = () => {
         {/* Bottom Section Below the Line (Always Visible) */}
         <div className="w-full mt-4 flex flex-col md:flex-row gap-4">
           {/* Each Bids component will take equal space in a row format */}
-          <ActiveOrders className="flex-1" />
-          <ParLevels className="flex-1" />
-          <PendingOrders className="flex-1"/>
+          <ActiveOrders className="flex-1" id={isLoggedIn.id} />
+          <Link href="parlevels"><ParLevels className="flex-1" id={isLoggedIn.id} /></Link>
+          <PendingOrders className="flex-1" id={isLoggedIn.id} />
         </div>
 
         <div className='pt-4'>
-          <OrderList/>
+          <OrderList id={isLoggedIn.id}/>
         </div>
 
       </div>

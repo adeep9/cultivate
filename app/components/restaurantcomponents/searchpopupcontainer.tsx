@@ -15,7 +15,7 @@ const Popup: React.FC<PopupProps> = ({ isOpen, togglePopup, children }) => {
     <div className="min-w-[250px] fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg">
         {children}
-        <button onClick={togglePopup} className="px-4 py-2 bg-red-500 text-white rounded-md mt-4">
+        <button onClick={togglePopup} className="px-4 bg-red-500 text-white rounded-md mt-4">
           Close
         </button>
       </div>

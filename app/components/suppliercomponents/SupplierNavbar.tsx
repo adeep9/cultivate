@@ -13,7 +13,7 @@ import {
 import AccountForm from "../ui/accountedit"; // Ensure you have the correct path for AccountForm
 import Link from "next/link"; 
 
-export function Navbar() {
+export function SupplierNavbar() {
   // State to toggle navbar height
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -85,15 +85,7 @@ export function Navbar() {
             {/* Menu Links */}
             <p>
               <Link
-                href="/dashboard"
-                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
-              >
-                Dashboard
-              </Link>
-            </p>
-            <p>
-              <Link
-                href="/orders"
+                href="/supplier/orders"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
                 Orders
@@ -101,18 +93,10 @@ export function Navbar() {
             </p>
             <p>
               <Link
-                href="/payments"
+                href="/suppplier/contact"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
-                Fullfillment
-              </Link>
-            </p>
-            <p>
-              <Link
-                href="/payments"
-                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
-              >
-                Payments
+                Contact
               </Link>
             </p>
           </div>

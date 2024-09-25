@@ -23,20 +23,22 @@ const Login = () => {
 
     if (res.ok) {
       // If login is successful, redirect to dashboard
-      console.log('Login successful, redirecting...');
-      router.push('/dashboard');
+      const data = await res.json(); // Parse response JSON
+      if(data.supplierType) {
+        router.push('/restaurant/orders');
+      } else {
+        router.push('/supplier/orders');
+      }
+      
     } else if (res.status === 404) {
       // If the user is not found (404), redirect to /notexists page
-      console.log('User not found, redirecting to /notexists');
       router.push('/notexists');
     } else if (res.status === 401) {
       // If the password is incorrect (401), set error message
       setError('Incorrect password. Please try again.');
-      console.log('Password incorrect');
     } else {
       // Handle other errors
       setError('An error occurred. Please try again.');
-      console.log('Login Error');
     }
   };
 

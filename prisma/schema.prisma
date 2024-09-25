@@ -25,17 +25,17 @@ model Supplier {
 }
 
 model Restaurant {
-  id           Int      @id @default(autoincrement())
+  id           Int        @id @default(autoincrement())
   name         String
-  email        String   @unique
-  phone        String   @unique
+  email        String     @unique
+  phone        String     @unique
   address1     String
   city         String
   state        String
   postcode     Int
   country      String
   password     String
-  createdAt    DateTime @default(now())
+  createdAt    DateTime   @default(now())
   loggedInLast DateTime
   orders       Order[]
   parLevels    ParLevel[]
@@ -45,11 +45,11 @@ model Order {
   id           Int         @id @default(autoincrement())
   restaurantId Int
   supplierId   Int?
-  notes        String?
-  dateDue      DateTime?
   createdAt    DateTime    @default(now())
   lastUpdated  DateTime    @updatedAt
   status       String      @default("Pending")
+  dateDue      DateTime?
+  notes        String?
   restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
   supplier     Supplier?   @relation(fields: [supplierId], references: [id])
   items        OrderItem[]
@@ -65,27 +65,27 @@ model OrderItem {
 }
 
 model Item {
-  id     Int         @id @default(autoincrement())
-  name   String
-  price  Float
-  unit   String
-  orders OrderItem[]
+  id            Int            @id @default(autoincrement())
+  name          String
+  price         Float
+  unit          String
+  orders        OrderItem[]
   parLevelItems ParLevelItem[]
 }
 
 model ParLevel {
-  id           Int        @id @default(autoincrement())
+  id           Int            @id @default(autoincrement())
   restaurantId Int
-  createdAt    DateTime   @default(now())
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  createdAt    DateTime       @default(now())
+  restaurant   Restaurant     @relation(fields: [restaurantId], references: [id])
   items        ParLevelItem[]
 }
 
 model ParLevelItem {
-  id        Int   @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   parLevelId Int
-  itemId    Int
-  quantity  Int
-  item      Item  @relation(fields: [itemId], references: [id])
-  parLevel  ParLevel @relation(fields: [parLevelId], references: [id])
+  itemId     Int
+  quantity   Int
+  item       Item     @relation(fields: [itemId], references: [id])
+  parLevel   ParLevel @relation(fields: [parLevelId], references: [id])
 }

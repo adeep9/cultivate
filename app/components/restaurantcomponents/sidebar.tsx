@@ -1,6 +1,6 @@
 import { Buttontile } from "../ui/tile"; // Adjust import path as needed
 import  Account  from "../ui/account";
-import { BusIcon, ContactIcon } from "lucide-react";
+import { ContactIcon, KeyIcon } from "lucide-react";
 
 const OrderIcon = ({ className }: { className?: string }) => (
   <img src="/package-2.svg" alt="Home Icon" className={className} />
@@ -15,7 +15,7 @@ export function Sidebar() {
         <div className="pt-4">
           {/*<Buttontile label="Home" href="/rdashboard" Icon={HomeIcon} />*/}
           <Buttontile label="Orders" href="/restaurant/orders" Icon={OrderIcon} />
-          <Buttontile label="Par Levels" href="/restaurant/parlevels" Icon={BusIcon} />
+          <Buttontile label="Par Levels" href="/restaurant/parlevels" Icon={KeyIcon} />
           <Buttontile label="Contact" href="/restaurant/contact" Icon={ContactIcon} />
         </div>
       </div>

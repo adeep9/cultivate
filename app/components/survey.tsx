@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import "../styles/survey.css";
 
+//FormData will also include userType
 interface FormData {
   [key: string]: string;
 }
@@ -34,17 +35,40 @@ const SurveyForm = () => {
 
   const [errors, setErrors] = useState({
     name: '',
-    address: '',
+    address1: '',
+    city: '',
+    postcode: '',
+    state: '',
+    country: '',
   });
 
   const validate = () => {
-    const newErrors = { name: '', address: '' };
+    const newErrors = { 
+    name: '',
+    address1: '',
+    city: '',
+    postcode: '',
+    state: '',
+    country: '',
+  };
 
     if (!formData.name) {
       newErrors.name = 'Name is required';
     }
-    if (!formData.address) {
-      newErrors.address = 'Address is required';
+    if (!formData.address1) {
+      newErrors.address1 = 'Address is required';
+    }
+    if (!formData.city) {
+      newErrors.city = 'City is required';
+    }
+    if (!formData.postcode) {
+      newErrors.postcode = 'Postcode is required';
+    }
+    if (!formData.state) {
+      newErrors.state = 'State is required';
+    }
+    if (!formData.country) {
+      newErrors.country = 'Country is required';
     }
 
     setErrors(newErrors);
@@ -55,6 +79,7 @@ const SurveyForm = () => {
 
   const handleNext = async () => {
     if (step === 2) {
+      //Check for errors
       const hasErrors = validate();
       if (hasErrors) {
         return; // Don't proceed if there are errors
@@ -72,14 +97,11 @@ const SurveyForm = () => {
   
         if (res.ok) {
           router.push("/login");
-        } else if (res.status === 500) {
-          // If error 500, redirect to /exists page
-          router.push("/exists");
         } else {
-          console.error("Failed to submit data");
+          console.error("Failed to create user!");
         }
       } catch (error) {
-        console.error("An error occurred:", error);
+        console.error("An error occurred: ", error);
       }
     } else {
       setStep(step + 1);
@@ -98,7 +120,7 @@ const SurveyForm = () => {
             <button
               className="btn-custom-r"
               onClick={() => {
-                setFormData({ ...formData, userType: "restaurant" });
+                setFormData({ ...formData, supplierType:  "n"});
                 handleNext();
               }}
             >
@@ -107,7 +129,7 @@ const SurveyForm = () => {
             <button
               className="btn-custom-s"
               onClick={() => {
-                setFormData({ ...formData, userType: "supplier" });
+                setFormData({ ...formData, supplierType: "y" });
                 handleNext();
               }}
             >
@@ -117,59 +139,7 @@ const SurveyForm = () => {
         </div>
       )}
 
-      {step === 2 && formData.userType === "restaurant" && (
-        <div className="space-y-8 animate-fade-in">
-          <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
-            A few more questions...
-          </p>
-          <div className="flex flex-col space-y-4">
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-left text-sm font-medium text-gray-700 mb-1"
-              >
-                Restaurant Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                placeholder="Restaurant Name"
-                value={formData.name}
-                onChange={handleChange}
-                className="p-2 border border-gray-300 rounded-md w-full"
-              />
-              {errors.name && <p className="text-red-600 text-xs mt-1">{errors.name}</p>}
-            </div>
-            <div>
-              <label
-                htmlFor="address"
-                className="block text-left text-sm font-medium text-gray-700 mb-1"
-              >
-                Restaurant Address
-              </label>
-              <input
-                type="text"
-                id="address"
-                name="address"
-                placeholder="Restaurant Address"
-                value={formData.address}
-                onChange={handleChange}
-                className="p-2 border border-gray-300 rounded-md w-full"
-              />
-              {errors.address && <p className="text-red-600 text-xs mt-1">{errors.address}</p>}
-            </div>
-          </div>
-          <button
-            onClick={handleNext}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-          >
-            Submit
-          </button>
-        </div>
-      )}
-
-      {step === 2 && formData.userType === "supplier" && (
+      {step === 2 && (
         <div className="space-y-6 animate-fade-in">
           <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
             Just one more step...
@@ -179,36 +149,98 @@ const SurveyForm = () => {
               htmlFor="name"
               className="block text-left text-sm font-medium text-gray-700 mb-1"
             >
-              Supplier Name
+              Business Name
             </label>
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Supplier Name"
+              placeholder="Business Name"
               value={formData.name}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded-md w-full"
             />
             {errors.name && <p className="text-red-600 text-xs mt-1">{errors.name}</p>}
-          </div>
-          <div>
             <label
-              htmlFor="address"
+              htmlFor="address1"
               className="block text-left text-sm font-medium text-gray-700 mb-1"
             >
-              Supplier Address
+              Address Line 1
             </label>
             <input
               type="text"
-              id="address"
-              name="address"
-              placeholder="Supplier Address"
-              value={formData.address}
+              id="address1"
+              name="address1"
+              placeholder="10 Example St, Suburb"
+              value={formData.address1}
               onChange={handleChange}
               className="p-2 border border-gray-300 rounded-md w-full"
             />
-            {errors.address && <p className="text-red-600 text-xs mt-1">{errors.address}</p>}
+            {errors.address1 && <p className="text-red-600 text-xs mt-1">{errors.address1}</p>}
+            <label
+              htmlFor="city"
+              className="block text-left text-sm font-medium text-gray-700 mb-1"
+            >
+              City
+            </label>
+            <input
+              type="text"
+              id="city"
+              name="city"
+              placeholder="City"
+              value={formData.city}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-md w-full"
+            />
+            {errors.city && <p className="text-red-600 text-xs mt-1">{errors.city}</p>}
+            <label
+              htmlFor="postcode"
+              className="block text-left text-sm font-medium text-gray-700 mb-1"
+            >
+              Postcode
+            </label>
+            <input
+              type="text"
+              id="postcode"
+              name="postcode"
+              placeholder="Postcode"
+              value={formData.postcode}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-md w-full"
+            />
+            {errors.postcode && <p className="text-red-600 text-xs mt-1">{errors.postcode}</p>}
+            <label
+              htmlFor="state"
+              className="block text-left text-sm font-medium text-gray-700 mb-1"
+            >
+              State
+            </label>
+            <input
+              type="text"
+              id="state"
+              name="state"
+              placeholder="State"
+              value={formData.state}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-md w-full"
+            />
+            {errors.state && <p className="text-red-600 text-xs mt-1">{errors.state}</p>}
+            <label
+              htmlFor="country"
+              className="block text-left text-sm font-medium text-gray-700 mb-1"
+            >
+              Country
+            </label>
+            <input
+              type="text"
+              id="country"
+              name="country"
+              placeholder="Country"
+              value={formData.country}
+              onChange={handleChange}
+              className="p-2 border border-gray-300 rounded-md w-full"
+            />
+            {errors.country && <p className="text-red-600 text-xs mt-1">{errors.country}</p>}
           </div>
           <button
             onClick={handleNext}

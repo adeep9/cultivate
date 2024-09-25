@@ -203,7 +203,7 @@ export function DataTableDemo({ onAddProduct }: DataTableProps) {
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Loading results...
                 </TableCell>
               </TableRow>
             )}
@@ -212,7 +212,7 @@ export function DataTableDemo({ onAddProduct }: DataTableProps) {
       </div>
 
       {/* Add Button */}
-      <div className="flex items-center justify-end">
+      <div className="flex flex-row items-center justify-end pt-4">
         <Button type="button" onClick={handleAdd}>
           Add
         </Button>

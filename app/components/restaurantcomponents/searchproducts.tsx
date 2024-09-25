@@ -30,11 +30,12 @@ interface SearchProductsProps {
   products: ProductWithVolume[];
   setProducts: React.Dispatch<React.SetStateAction<ProductWithVolume[]>>;
   readOnly?: boolean;
+  parLevel?: boolean;
 }
 
-export default function SearchProducts({ products, setProducts, readOnly = false }: SearchProductsProps) {
+export default function SearchProducts({ products, setProducts, readOnly = false , parLevel = false}: SearchProductsProps) {
   const [isSearchPopupOpen, setIsSearchPopupOpen] = useState<boolean>(false);
-
+  const parlvl = parLevel;
   const addProduct = (product: Product) => {
     // Initialize volume to 1 when adding a new product
     const productWithVolume = { ...product, volume: 1 };
@@ -65,8 +66,28 @@ export default function SearchProducts({ products, setProducts, readOnly = false
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>Manual Order</CardTitle>
-          <CardDescription>Select From our Catalogue</CardDescription>
+          <CardTitle>
+          {parLevel ? (
+            "Par Level Items"
+          ) : (
+            readOnly ? (
+                "Item Review"
+              ) : (
+                "Item Ordering"
+            )
+          )}
+
+          </CardTitle>
+          <CardDescription>
+            {parLevel ? (
+              "Helpful baseline for weekly ordering. Save time. Save money."
+            ) : (
+              readOnly ? (
+              "Please review your selected items carefully"
+            ) : (
+              "Select from your collection of items"
+            ))}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -92,8 +113,22 @@ export default function SearchProducts({ products, setProducts, readOnly = false
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center">
-                    No products added.
+                  <TableCell colSpan={6}>
+                  {parLevel ? (
+                    <div className="flex justify-center items-center min-h-[150px]">
+                      <p className="text-m font-normal">No items selected. Click submit to have a blank Par Level.</p>
+                    </div>
+                  ) : (
+                    readOnly ? (
+                      <div className="flex justify-center items-center min-h-[150px]">
+                        <p className="text-m font-normal text-red-500">You must have products selected.</p>
+                      </div>
+                    ) : (
+                      <div className="flex justify-center items-center min-h-[150px]">
+                        <p className="text-m font-normal">No products selected.</p>
+                      </div>
+                  ))}
+                    
                   </TableCell>
                 </TableRow>
               )}

@@ -1,30 +1,36 @@
-import Link from "next/link"
-import { HeroHighlight } from "../../components/ui/hero-highlight"
+"use client";
+
+import React from 'react';
+import { Dualbar } from '@/app/components/restaurantcomponents/dualbar';
 
 const Contact = () => {
   return (
-    <HeroHighlight containerClassName="h-screen w-full flex items-center justify-center">
-      <div className="text-center space-y-4">        
-        <div className="space-y-8 animate-fade-in">
-                <p className="text-2xl font-semibold tracking-tight bg-gradient-to-r from-blue-800 to-sky-700 bg-clip-text text-transparent">
-                    Contact Us!
-                </p>
-                <Link href="/login">
-                <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-                    Phone
-                </button>
-                </Link>
-                <Link href="/">
-                <button
-                    className="px-4 m-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-                    Email
-                </button>
-                </Link>
+    <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
+      {/* Sidebar Component */}
+      <Dualbar />
+
+      {/* Main Content Area for All Screens */}
+      <div className="orders-page flex flex-col justify-start w-full p-6">
+        {/* Title and Horizontal Line (Visible on Medium and Larger Screens) */}
+        <div className="hidden md:flex flex-col w-full ">
+          {/* Hidden on small screens, visible on md and larger */}
+          <p className="text-2xl text-black tracking-tight font-medium mb-4 mt-2 translate-x-1">
+            Contact
+          </p>
+          <hr className="border-t border-gray-300 w-full translate-y-[1px]" />
+        </div>
+
+        {/* Bottom Section with Success Message and Button */}
+        <div className="w-full max-h-full mt-10 flex flex-col md:flex-row gap-4 items-center justify-center">
+          <div className="text-center">
+            <p className="text-xl mb-6 font-semibold">We are here to help you!</p>
+            <p className="text-lg mb-1">Phone: 0491 383 021</p>
+            <p className="text-lg mb-6">Email: admin@polinate.com</p>
+          </div>
         </div>
       </div>
-    </HeroHighlight>
-  )
-}
+    </div>
+  );
+};
 
-export default Contact
+export default Contact;

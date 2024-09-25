@@ -1,8 +1,6 @@
-// Import necessary libraries and components
-import React from 'react';
+import CreateParLevel from '@/app/components/restaurantcomponents/CreateParLevel';
 import { Dualbar } from '../../components/restaurantcomponents/dualbar';
-import CreateParLevel from '@/app/components/restaurantcomponents/createparlevel';
-
+import ParLevelDocket from '@/app/components/restaurantcomponents/ParLevelDocket';
 
 
 const ParLevelPage = () => {
@@ -21,17 +19,16 @@ const ParLevelPage = () => {
           </p>
           <hr className="border-t border-gray-300 w-full translate-y-[1px]" />
         </div>
-
+          
         <div className="pt-4">
-          <div className="w-full h-full border bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-900 border-gray-300 rounded-xl p-1">
-            <CreateParLevel/>
+          <div className="w-full h-full border bg-gradient-to-br from-orange-500 via-yellow-500 to-orange-900 border-gray-300 rounded-xl p-1">
+          <CreateParLevel />
           </div>
         </div>
 
         <div className='pt-4'>
-            Current Par Levels 
+            <ParLevelDocket />
         </div>
-
       </div>
     </div>
   );

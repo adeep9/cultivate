@@ -4,10 +4,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
-
-    //Access restaurant id from session data
-    const id = 1
+export async function POST(request: Request) {
+    const { id } = await request.json();
 
     try {
         // Fetch all unique items based on the 'name', returning both 'name' and 'price'

@@ -5,9 +5,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
-  // Set a constant restaurantId for now
-  const restaurantId = 1; // Replace this with the actual restaurant ID or retrieve it dynamically
+export async function POST(request: Request) {
+  const { id } = await request.json();
+  const restaurantId = id; 
 
   try {
     // Fetch all orders for the restaurant
@@ -27,7 +27,6 @@ export async function GET() {
     });
 
     // Return the orders as JSON
-    console.log(orders)
     return NextResponse.json(orders);
   } catch (error) {
     console.error('Error fetching orders:', error);

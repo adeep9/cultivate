@@ -1,6 +1,8 @@
 /**
  * Route API for restaurants to create orders
  */
+export const dynamic = "force-dynamic"
+
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Assuming prisma is initialized in a separate file
 
@@ -41,8 +43,7 @@ export async function POST(request: Request) {
       return NextResponse.json(newOrder, { status: 201 });
 
   } catch (error) {
-    console.log(error)
-    return NextResponse.json({ error: 'Error creating order: ' }, { status: 500 });
-
-  }
+    console.error('Error creating order:', error); // Log the error for debugging
+    return NextResponse.json({ error: 'Error creating order: ' + error });
+  };
 }

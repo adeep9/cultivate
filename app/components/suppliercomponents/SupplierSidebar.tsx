@@ -1,5 +1,6 @@
 import { Buttontile } from "../ui/tile"; // Adjust import path as needed
 import  Account  from "../ui/account";
+import { TruckIcon } from "lucide-react";
 
 
 const HomeIcon = ({ className }: { className?: string }) => (
@@ -14,7 +15,7 @@ const PaymentIcon = ({ className }: { className?: string }) => (
   <img src="/zap.svg" alt="Home Icon" className={className} />
 );
 
-export function Sidebar() {
+export function SupplierSidebar() {
 
   return (
     <div className="w-60 h-screen bg-white border border-slate-300">
@@ -23,10 +24,8 @@ export function Sidebar() {
         <div className="w-full h-full">
           <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Main </p>
           <div className="pt-4">
-            <Buttontile label="Home" href="/sdashboard" Icon={HomeIcon} />
             <Buttontile label="Orders" href="/supplier/orders" Icon={OrderIcon} />
-            <Buttontile label="Fullfillment" href="/supplier/fulfillments" Icon={PaymentIcon} />
-            <Buttontile label="Contact" href="/contact" Icon={PaymentIcon} />
+            <Buttontile label="Contact" href="/supplier/contact" Icon={PaymentIcon} />
           </div>
           <div className="mt-52 translate-y-48">
             <Account />

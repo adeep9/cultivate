@@ -5,17 +5,6 @@ import { Dualbar } from '@/app/components/restaurantcomponents/dualbar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-interface Order {
-  id: number;
-  restaurantId: number;
-  supplierId: number;
-  notes: string;
-  dueDate: Date;
-  createdAt: Date;
-  status: string;
-}
 
 const IndividualOrder = () => {
   const { id } = useParams(); // Get the order ID from the URL

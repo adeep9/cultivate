@@ -5,8 +5,11 @@ import Link from "next/link"
 const OrderListRow = ({order}: any) => {
   return (
     <TableRow className="bg-white">
+        <TableCell className="hidden sm:table-cell">
+            {order.id}
+        </TableCell>
         <TableCell className="font-medium"> 
-            {order.createdAt}
+            {new Date(order.dateDue).toLocaleDateString()}
         </TableCell>
         <TableCell className="hidden sm:table-cell">
             {order.supplierId}
@@ -14,8 +17,15 @@ const OrderListRow = ({order}: any) => {
         <TableCell className="hidden sm:table-cell">
             {order.items.length}
         </TableCell>
-        <TableCell className="hidden sm:table-cell">
-            {order.status}
+        <TableCell className="font-medium">
+            {order.status === "Pending" ? (
+                <p className="text-orange-500">Pending</p>
+            ) : (
+                <p className="text-green-500">Active</p>
+            )}
+        </TableCell>
+        <TableCell className="hidden sm:table-cell text-gray-500">
+            {new Date(order.createdAt).toLocaleDateString()}
         </TableCell>
         <TableCell>
             <Button variant="outline">
