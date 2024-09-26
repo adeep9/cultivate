@@ -16,9 +16,9 @@ const IndividualOrder = () => {
       <Dualbar />
       {/* Main Content Area for All Screens */}
       <div className="orders-page flex flex-col justify-start w-full p-6">
-        {/* Title and Horizontal Line (Visible on Medium and Larger Screens) */}
-        <div className="hidden md:flex flex-col w-full">
-          {/* Hidden on small screens, visible on md and larger */}
+        {/* Title and Horizontal Line */}
+        <div className="flex flex-col w-full">
+          {/* Title and Back Button */}
           <div className="flex flex-row justify-between items-center">
             <p className="text-2xl text-black tracking-tight font-medium mb-4 mt-2 translate-x-1">
               Individual Order
@@ -29,6 +29,8 @@ const IndividualOrder = () => {
           </div>
           
           <hr className="border-t border-gray-300 w-full translate-y-[1px]" />
+          
+          {/* Docket Component */}
           <div className="mt-4">
             <Docket orderId={orderId}/>
           </div>
@@ -40,3 +42,4 @@ const IndividualOrder = () => {
 };
 
 export default IndividualOrder;
+
