@@ -4,7 +4,6 @@ import {
   Check,
   Copy,
   MoreVertical,
-  Truck,
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -30,7 +29,6 @@ import DocketItem from "./DocketItem"
 import { OrderItemProps } from "./DocketItem"
 
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 
 interface Order {
   createdAt: Date;
@@ -247,7 +245,7 @@ export default function Docket({orderId, supplier = false}: DocketProps) {
   }
     
   return (
-    <Card className="overflow-hidden min-w-96">
+    <Card className="overflow-hidden">
       <CardHeader className="flex flex-row items-start bg-muted/50">
         <div className="grid gap-0.5">
           <CardTitle className="group flex items-center gap-2 text-lg">
