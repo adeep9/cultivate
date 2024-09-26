@@ -4,22 +4,28 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+interface ParLevel {
+    id: number;
+    restaurantId: number;
+    createdAt: Date;
+}
+
 export async function POST(request: Request) {
     const { id } = await request.json();
 
     try {
         // Fetch all unique items based on the 'name', returning both 'name' and 'price'
-        const parlevel: any = await prisma.parLevel.findMany({ where: {
+        const parlevel = await prisma.parLevel.findMany({ where: {
             restaurantId: id,
         } })
-        
-        if (!parlevel) {
+
+        if (!parlevel[0].id) {
             throw new Error
         }
 
         //Find individual item data
         const parLevelItems = await prisma.parLevelItem.findMany({
-            where: { parLevelId: parlevel.id }
+            where: { parLevelId: parlevel[0].id }
         });
 
         // Initialize an array to hold the item data

@@ -6,6 +6,11 @@ export const dynamic = "force-dynamic"
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Assuming prisma is initialized in a separate file
 
+interface Item {
+  id: number;
+  volume: number;
+}
+
 export async function POST(request: Request) {
   const { orderInfo, products, restaurantId } = await request.json();
 
@@ -28,7 +33,7 @@ export async function POST(request: Request) {
           notes: notes,
           dateDue: isoDateTime,
           items: {
-            create: products.map((item: any) => ({
+            create: products.map((item: Item) => ({
               itemId: item.id,
               quantity: item.volume,
             })),

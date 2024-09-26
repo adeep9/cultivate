@@ -3,7 +3,7 @@
 import ParLevelDocket from '@/app/components/restaurantcomponents/ParLevelDocket';
 import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 import { getCookie } from '@/lib/utils';
-import CreateParLevel from '../../components/restaurantcomponents/CreateParLevel';
+import { CreateParLevel } from '@/app/components/restaurantcomponents/CreateParLevel';
 
 
 const ParLevelPage = () => {

@@ -7,7 +7,6 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { Princess_Sofia } from '@next/font/google';
 
 export async function POST(request: Request) {
     const { id } = await request.json(); //par level id
@@ -21,7 +20,7 @@ export async function POST(request: Request) {
         }
     })
 
-    const parLevelItemsArray: any = []
+    const parLevelItemsArray = []
 
     for (const item of parLevelItems) {
         const itemInfo = await prisma.item.findUnique({ 

@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export default function CreateParLevel() {
+export function CreateParLevel() {
   return (
     <Card className="sm:col-span-2">
       <CardHeader className="pb-3">

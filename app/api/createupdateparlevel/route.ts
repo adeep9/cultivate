@@ -7,6 +7,11 @@ export const dynamic = "force-dynamic";
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Assuming prisma is initialized in a separate file
 
+interface Item {
+  id: number;
+  volume: number;
+}
+
 interface ParItem {
     id: number;
     name: string;
@@ -32,7 +37,7 @@ export async function POST(request: Request) {
         data: {
           items: {
             deleteMany: {}, // Optional: clear previous items before adding new ones
-            create: products.map((item: any) => ({
+            create: products.map((item: Item) => ({
               itemId: item.id,
               quantity: item.volume, // Assuming `volume` is the quantity
             })),
@@ -49,7 +54,7 @@ export async function POST(request: Request) {
         data: {
           restaurantId,
           items: {
-            create: products.map((item: any) => ({
+            create: products.map((item: Item) => ({
               itemId: item.id,
               quantity: item.volume, // Assuming `volume` is the quantity
             })),

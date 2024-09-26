@@ -1,7 +1,7 @@
 'use client';
 
 import Docket from '@/app/components/restaurantcomponents/docket';
-import { SupplierDualbar } from '@/app/components/suppliercomponents/DualBar';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -13,7 +13,7 @@ const IndividualOrder = () => {
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
-      <SupplierDualbar />
+      <Dualbar />
       {/* Main Content Area for All Screens */}
       <div className="orders-page flex flex-col justify-start w-full p-6">
         {/* Title and Horizontal Line (Visible on Medium and Larger Screens) */}
