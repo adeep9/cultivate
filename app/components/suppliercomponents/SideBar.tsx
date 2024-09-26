@@ -17,9 +17,14 @@ export function Sidebar({accountData}: {accountData: AccountData}) {
     <div className="w-60 h-screen bg-white border border-slate-300 flex flex-col justify-between">
       <div className="p-4">
         {/** Polinate main logo */}
-        <img src="/logofull.svg" alt="polinate logo" className="w-35 h-19" />
+        <img src="/logofull.svg" alt="polinate logo" className="w-36 h-16 transform translate-x-6" />
         <hr className="border-t border-gray-300 mb-4 mt-4" />
-        <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Supplier Partner</p>
+        {accountData.accountType === "restaurant" ? (
+          <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Restaurant Partner</p>
+        ) : (
+          <p className="mt-2 ml-1 tracking-tight text-sm text-gray-300"> Supplier Partner</p>
+        )}
+        
         <div className="pt-4">
           {/*<Buttontile label="Home" href="/rdashboard" Icon={HomeIcon} />*/}
           {accountData.accountType === "restaurant" ? (

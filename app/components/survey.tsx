@@ -14,6 +14,7 @@ const SurveyForm = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({});
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     // Retrieve data from session storage
@@ -79,6 +80,7 @@ const SurveyForm = () => {
 
   const handleNext = async () => {
     if (step === 2) {
+      setIsLoading(true)
       //Check for errors
       const hasErrors = validate();
       if (hasErrors) {
@@ -102,6 +104,9 @@ const SurveyForm = () => {
         }
       } catch (error) {
         console.error("An error occurred: ", error);
+        alert("Error. Could not create account!")
+      } finally {
+        setIsLoading(false)
       }
     } else {
       setStep(step + 1);
@@ -242,12 +247,32 @@ const SurveyForm = () => {
             />
             {errors.country && <p className="text-red-600 text-xs mt-1">{errors.country}</p>}
           </div>
-          <button
-            onClick={handleNext}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-          >
-            Submit
-          </button>
+          {isLoading ? (
+            <>
+              
+              <button
+                onClick={handleNext}
+                disabled
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition z-10"
+              >
+                <div className="flex flex-row">
+                  <div className="loader"/>
+                  <div className="pl-2">Submit</div>
+                </div>
+                
+              </button>
+            </>
+          ) : (
+            <>
+            <button
+              onClick={handleNext}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition z-10"
+            >
+              Submit
+            </button>
+          </>
+          )}
+          
         </div>
       )}
     </div>

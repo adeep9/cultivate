@@ -7,38 +7,46 @@ import { useRouter } from 'next/navigation';
 const Login = () => {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState<string | null>(null); // Add state for error message
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
+    setIsLoading(true)
     e.preventDefault();
     setError(null); // Reset error before making the request
 
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (res.ok) {
-      // If login is successful, redirect to dashboard
-      const data = await res.json(); // Parse response JSON
-      if(data.supplierType) {
-        router.push('/restaurant/orders');
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (res.ok) {
+        // If login is successful, redirect to dashboard
+        const data = await res.json(); // Parse response JSON
+        if(data.supplierType) {
+          router.push('/restaurant/orders');
+        } else {
+          router.push('/supplier/orders');
+        }
+        
+      } else if (res.status === 404) {
+        // If the user is not found (404), redirect to /notexists page
+        router.push('/notexists');
+      } else if (res.status === 401) {
+        // If the password is incorrect (401), set error message
+        setError('Incorrect password. Please try again.');
       } else {
-        router.push('/supplier/orders');
+        // Handle other errors
+        setError('An error occurred. Please try again.');
       }
-      
-    } else if (res.status === 404) {
-      // If the user is not found (404), redirect to /notexists page
-      router.push('/notexists');
-    } else if (res.status === 401) {
-      // If the password is incorrect (401), set error message
-      setError('Incorrect password. Please try again.');
-    } else {
-      // Handle other errors
-      setError('An error occurred. Please try again.');
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
     }
   };
 
@@ -90,12 +98,26 @@ const Login = () => {
         )}
 
         {/* Submit Button */}
-        <button
+        {isLoading ? (
+          <button
           type="submit"
-          className="w-full mt-2 py-2 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Log In
-        </button>
+          disabled
+          className="w-full mt-2 py-2 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors z-10"
+          >
+            <div className="flex flex-row justify-center">
+              <div className="loader"/>
+              <div className="pl-2">Login</div>
+            </div>
+          </button>
+        ) : (
+          <button
+          type="submit"
+          className="w-full mt-2 py-2 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors z-10"
+          >
+            Log In
+          </button>
+        )}
+        
       </form>
     </main>
   );

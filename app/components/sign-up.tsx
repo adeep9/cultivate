@@ -12,6 +12,7 @@ const Signup = () => {
     userType: 'restaurant' // Assuming default userType
   });
   const [error, setError] = useState(''); // Single error state
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,6 +34,7 @@ const Signup = () => {
   };
 
   const handleSubmit = (e: React.FormEvent) => {
+    setIsLoading(true)
     e.preventDefault();
     
     const validationError = validate();
@@ -46,8 +48,8 @@ const Signup = () => {
       sessionStorage.setItem('signupData', JSON.stringify(formData));
     }
     
-    
     // Redirect to survey page
+    setIsLoading(false)
     router.push('/survey');
   };
 
@@ -119,13 +121,29 @@ const Signup = () => {
           </p>
         )}
 
-        {/* Submit Button */}
-        <button
-          type="submit" 
-          className="w-full py-1 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors"
-        >
-          Join Us
-        </button>
+        {isLoading ? (
+            <>
+              <button
+                disabled
+                type="submit"
+                className="w-full py-1 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors z-10"
+              >
+                <div className="flex flex-row justify-center">
+                  <div className="loader"/>
+                  <div className="pl-2">Join Us</div>
+                </div>
+              </button>
+            </>
+          ) : (
+            <>
+            <button
+              type="submit"
+              className="w-full py-1 bg-gradient-to-tr from-blue-900 to-blue-600 text-white font-bold tracking-tight rounded-md hover:bg-blue-600 transition-colors z-10"
+            >
+              Join Us
+            </button>
+          </>
+          )}
       </form>
     </main>
   );
