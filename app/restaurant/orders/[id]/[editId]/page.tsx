@@ -1,8 +1,8 @@
 "use client";
 
-import { Dualbar } from '@/app/components/restaurantcomponents/dualbar';
 import EditOrderForm from '@/app/components/restaurantcomponents/EditOrderForm';
 import { useParams } from 'next/navigation';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 const EditOrderPage = () => {
   const { id } = useParams();

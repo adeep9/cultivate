@@ -1,18 +1,18 @@
 // Import necessary libraries and components
-import { Dualbar } from '../../components/restaurantcomponents/dualbar';
+"use client"
+
 import Create from '../../components/restaurantcomponents/createorder';
 import OrderList from '../../components/restaurantcomponents/orderlist';
 import ActiveOrders from '../../components/restaurantcomponents/activeorder';
 import ParLevels from '../../components/restaurantcomponents/parlevels';
 import PendingOrders from '../../components/restaurantcomponents/pendingorder';
 import Link from 'next/link';
+import { getCookie } from '@/lib/utils';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 const OrdersPage = () => {
-
-  //Find logged in restaurant info from session data
-  const isLoggedIn = {
-    id: 1
-  }
+  const userId: string = getCookie('userId'); //get userId from session
+  const id = Number(userId)
 
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
@@ -32,20 +32,20 @@ const OrdersPage = () => {
 
         <div className="pt-4">
           <div className="w-full h-full border bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-900 border-gray-300 rounded-xl p-1">
-            <Create />
+            <Create id={id}/>
           </div>
         </div>
 
         {/* Bottom Section Below the Line (Always Visible) */}
         <div className="w-full mt-4 flex flex-col md:flex-row gap-4">
           {/* Each Bids component will take equal space in a row format */}
-          <ActiveOrders className="flex-1" id={isLoggedIn.id} />
-          <Link href="parlevels"><ParLevels className="flex-1" id={isLoggedIn.id} /></Link>
-          <PendingOrders className="flex-1" id={isLoggedIn.id} />
+          <ActiveOrders className="flex-1" id={id} />
+          <Link href="parlevels"><ParLevels className="flex-1" id={id} /></Link>
+          <PendingOrders className="flex-1" id={id} />
         </div>
 
         <div className='pt-4'>
-          <OrderList id={isLoggedIn.id}/>
+          <OrderList id={id}/>
         </div>
 
       </div>

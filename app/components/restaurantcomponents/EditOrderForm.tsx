@@ -7,6 +7,7 @@ import SearchProducts, { ProductWithVolume } from './searchproducts';
 import { Calendar } from "@/components/ui/calendar";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getCookie } from '@/lib/utils';
 
 interface EditOrderFormProps {
     id: number
@@ -15,6 +16,8 @@ interface EditOrderFormProps {
 export default function EditOrderForm({id}:EditOrderFormProps) {
   // State functions
   const router = useRouter();
+  const userId: string = getCookie('userId'); //get userId from session
+  const userNumId = Number(userId)
 
   const [step, setStep] = useState<number>(1); //control stage of form
   const [formData, setFormData] = useState<{
@@ -266,6 +269,7 @@ export default function EditOrderForm({id}:EditOrderFormProps) {
         orderId: id,
         orderInfo: formData,
         products: products,
+        restaurantId: userNumId,
     };
 
     try {

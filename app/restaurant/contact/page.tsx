@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { Dualbar } from '@/app/components/restaurantcomponents/dualbar';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 const Contact = () => {
   return (

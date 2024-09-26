@@ -208,16 +208,38 @@ export default function Docket({orderId, supplier = false}: DocketProps) {
   }
 
   //Function to delete order
-  const deleteOrder = () => {
+  const deleteOrder = async () => {
     //Double check
+    const confirmed = confirm("Are you sure you want to delete this order?");
+      //Delete from database
+      if (confirmed) {
+      if (order) {
+        const response = await fetch('/api/deleteorder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: order.id }),  // Passing `id` as a JSON object
+        });
 
-    //Delete from database
+        if (response.ok) {
+          alert("Order Deleted Successfully")
+        } else {
+          alert("Order Could Not Be Deleted")
+          return;
+        }
 
-    //Push to orders page
-  }
-
-  const cancelOrder = () => {
-    //Cancel 
+      } else {
+        console.error("Could not delete order. Order does not exists")
+        return;
+      }
+    
+      //Push to orders page
+      //Will need to make this dynamic with session data userType
+      router.push('/restaurant/orders')
+      return;
+    }
+    return;
   }
 
   const printOrder = () => {
@@ -338,6 +360,17 @@ export default function Docket({orderId, supplier = false}: DocketProps) {
               {/** Calculate Sum of items */}
               <span>{totalPrice}</span>
             </li>
+          </ul>
+        </div>
+        <Separator className="my-4" />
+        <div>
+          <ul>
+          <li className="flex flex-col items-left font-semibold">
+            <p className="text-muted-foreground">Notes</p>
+          </li>
+          <li className="flex flex-col items-left">
+            <p className="text-muted-foreground">{order ? order.notes : "Loading Notes..."}</p>
+          </li>
           </ul>
         </div>
         <Separator className="my-4" />

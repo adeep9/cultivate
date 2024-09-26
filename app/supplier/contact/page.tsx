@@ -1,13 +1,13 @@
 "use client";
 
 import React from 'react';
-import { SupplierDualbar } from '@/app/components/suppliercomponents/SupplierDualbar';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 const Contact = () => {
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
-      <SupplierDualbar />
+      <Dualbar />
 
       {/* Main Content Area for All Screens */}
       <div className="orders-page flex flex-col justify-start w-full p-6">

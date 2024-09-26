@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import SearchProducts, { ProductWithVolume } from './searchproducts';
 import { Calendar } from "@/components/ui/calendar";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { getCookie } from '@/lib/utils';
 
 export default function OrderForm() {
   // State functions
@@ -29,10 +30,8 @@ export default function OrderForm() {
   const [prevLoading, setPrevLoading] = useState(false)
   const [clearLoading, setClearLoading] = useState(false)
 
-  //Get restaurant information (id) from session data
-  const isLoggedIn = {
-    id: 1
-  }
+  const userId: string = getCookie('userId'); //get userId from session
+  const id = Number(userId)
 
   // Handle the date change from the calendar
   const handleDateChange = (selectedDate: Date | undefined) => {
@@ -73,7 +72,7 @@ export default function OrderForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id: isLoggedIn.id,
+          id: id,
         })
       });
 
@@ -103,7 +102,7 @@ export default function OrderForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ id: isLoggedIn.id }),  // Passing `id` as a JSON object
+        body: JSON.stringify({ id: id }),  // Passing `id` as a JSON object
       });
 
       if (response.ok) {
@@ -178,6 +177,7 @@ export default function OrderForm() {
     const orderData = {
       orderInfo: formData,
       products: products,
+      restaurantId: id,
     };
 
     try {
@@ -245,7 +245,7 @@ export default function OrderForm() {
                   <button
                     type="button"
                     onClick={setDataParLevel}
-                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100 z-10'
                   >
                     <p className="">Par Levels</p>
                   </button>
@@ -267,7 +267,7 @@ export default function OrderForm() {
                   <button
                     type="button"
                     onClick={setDataPreviousOrder}
-                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100 z-10'
                   >
                     <p className="">Previous Orders</p>
                   </button>
@@ -289,7 +289,7 @@ export default function OrderForm() {
                   <button
                     type="button"
                     onClick={clearProducts}
-                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100'
+                    className='h-10 px-4 py-2 border border-gray-300 rounded-md bg-white text-gray-700 tracking-tighter hover:bg-gray-100 z-10'
                   >
                     <p className="">Clear</p>
                   </button>
@@ -328,40 +328,43 @@ export default function OrderForm() {
                 <div className="flex flex-col md:flex-row justify-between items-start space-y-8 md:space-y-0 md:space-x-8 mx-auto">
                   <div className="flex flex-row items-center md:items-start w-full">
                     {/* Date Section */}
-                    <div className="px-10 ">
-                      <h3 className="text-lg font-medium mb-2 text-center md:text-left">Select Date</h3>
-                      <input
-                        type="date"
-                        name="orderDate"
-                        className="h-8 w-full max-w-xs border bg-gray-50 rounded-md"
-                        value={formData.orderDate}
-                        onChange={handleChange}
-                        required
-                      />
-                      {/* Calendar Component */}
-                      <div className="">
-                        <Calendar
-                          mode="single"
+                    <div className="flex flex-col md:flex-row w-full px-10 space-y-6 md:space-y-0 md:space-x-6">
+                    {/* Date Selection Section */}
+                      <div className="flex flex-col w-full">
+                        <h3 className="text-lg font-medium mb-2 text-center md:text-left">Select Date</h3>
+                        <input
+                          type="date"
+                          name="orderDate"
+                          className="h-8 w-full border bg-gray-50 rounded-md"
+                          value={formData.orderDate}
+                          onChange={handleChange}
                           required
-                          selected={date}
-                          onSelect={handleDateChange}
-                          className="rounded-md border max-w-xs"
+                        />
+                        {/* Calendar Component */}
+                        <div className="mt-4">
+                          <Calendar
+                            mode="single"
+                            required
+                            selected={date}
+                            onSelect={handleDateChange}
+                            className="rounded-md border w-full"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Time and Notes Section */}
+                      <div className="flex flex-col w-full">
+                        <h3 className="text-lg font-medium pt-6 mb-2 text-center md:text-left">Additional Notes</h3>
+                        <textarea
+                          name="notes"
+                          className="bg-slate-50 p-2 border border-gray-200 rounded-md w-full h-24 resize-none"
+                          value={formData.notes}
+                          onChange={handleChange}
+                          placeholder="Enter any additional notes here..."
                         />
                       </div>
                     </div>
-
-                    {/* Time and Notes Section */}
-                    <div className="flex flex-col items-center md:items-start w-full">
-                      <h3 className="text-lg font-medium pt-6 mb-2 text-center md:text-left">Additional Notes</h3>
-                      <textarea
-                        name="notes"
-                        className="bg-slate-50 p-2 border border-gray-200 rounded-md w-48 h-24 resize-none"
-                        value={formData.notes}
-                        onChange={handleChange}
-                        placeholder="Enter any additional notes here..."
-                      />
-                    </div>
-                  </div>                  
+                  </div>
                 </div>
               </div>
             </div>

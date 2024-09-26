@@ -39,6 +39,12 @@ export async function POST(request: Request) {
       supplierType: supplierType
     });
 
+    //Set user ID cookie
+    response.cookies.set('userId', String(user.id), {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production', // Use secure flag in production
+    });
+
     //Set token cookie
     response.cookies.set('token', token, {
       httpOnly: true,

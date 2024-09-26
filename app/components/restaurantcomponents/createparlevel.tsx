@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import {
   Card,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -11,13 +12,6 @@ import {
 } from "@/components/ui/card"
 
 export default function CreateParLevel() {
-
-  //Get logged in user from session data
-  //This user will be a restaurant 
-
-  const loggedIn = {id: 1}
-
-
   return (
     <Card className="sm:col-span-2">
       <CardHeader className="pb-3">
@@ -27,9 +21,9 @@ export default function CreateParLevel() {
         </CardDescription>
       </CardHeader>
       <CardFooter>
-        <Link href="/restaurant/parlevels/createpar">
-          <Button>Update Par Levels</Button>
-        </Link>
+      <Link href="/restaurant/parlevels/createpar" className="z-10">
+        <Button>Update Par Levels</Button> 
+      </Link>
       </CardFooter>
     </Card>
   )

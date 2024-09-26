@@ -1,9 +1,8 @@
 "use client";
 
 import React from 'react';
-import { Dualbar } from '../../components/restaurantcomponents/dualbar';
 import Orderform from '../../components/restaurantcomponents/orderform';
-
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 
 const CreateOrderPage = () => {

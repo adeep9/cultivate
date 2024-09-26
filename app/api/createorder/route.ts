@@ -7,7 +7,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma'; // Assuming prisma is initialized in a separate file
 
 export async function POST(request: Request) {
-  const { orderInfo, products } = await request.json();
+  const { orderInfo, products, restaurantId } = await request.json();
 
   const { orderDate, notes } = orderInfo
 
@@ -15,9 +15,6 @@ export async function POST(request: Request) {
   const dueDateWithTime = String(orderDate) + 'T00:00:00Z'; // Append time in UTC
   const dueDateUTC = new Date(dueDateWithTime);
   const isoDateTime = dueDateUTC.toISOString();
-
-  //Get restaurant info from session data
-  const restaurantId = 1;
   
   //Check if data is valid
   if (!orderInfo || !products) {

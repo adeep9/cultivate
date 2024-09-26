@@ -1,7 +1,7 @@
 'use client';
 
 import Docket from '@/app/components/restaurantcomponents/docket';
-import { SupplierDualbar } from '@/app/components/suppliercomponents/SupplierDualbar';
+import { SupplierDualbar } from '@/app/components/suppliercomponents/DualBar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';

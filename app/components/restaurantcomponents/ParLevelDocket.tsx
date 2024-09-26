@@ -36,7 +36,7 @@ export interface ParLevelinfo {
   createdAt: Date;
 }
 
-export default function ParLevelDocket() {
+export default function ParLevelDocket({id}: {id:number}) {
 
   const [parLevelItemsArray, setParLevelItemsArray] = useState<ParLevelItem[]>([]);
   const [parLevelInfo, setParLevelInfo] = useState<ParLevelinfo | null>(null)
@@ -45,15 +45,10 @@ export default function ParLevelDocket() {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  //Get restaurant id from session data
-  const isLoggedIn = {
-    id: 1
-  }
-
   useEffect(() => {
     //Get par level info (createdAt and id)
     const getParLevelinfo =  async () => {
-      if (isLoggedIn) {
+      if (id) {
         setIsLoading(true)
         try {
           const response = await fetch('/api/parinfo', {
@@ -61,7 +56,7 @@ export default function ParLevelDocket() {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id: isLoggedIn.id }),  // Passing `id` as a JSON object
+            body: JSON.stringify({ id: id }),  // Passing `id` as a JSON object
           });
   
           if (!response.ok) {
@@ -74,6 +69,8 @@ export default function ParLevelDocket() {
 
         } catch (error) {
           console.log(error)
+        } finally {
+          setIsLoading(false)
         }
       }
     };
@@ -100,7 +97,11 @@ export default function ParLevelDocket() {
   
           const data = await response.json();  // Parse response JSON
           setParLevelItemsArray(data)
-        } 
+        } else {
+          setIsLoading(false)
+        }
+      } else {
+        setIsLoading(false)
       }
       
     };
@@ -145,10 +146,7 @@ export default function ParLevelDocket() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
               <DropdownMenuItem>Print</DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Delete</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -156,15 +154,13 @@ export default function ParLevelDocket() {
       <CardContent className="p-6 text-sm">
         <div className="grid gap-3">
           <div className="font-semibold">Par Level Item Details</div>
-
-          {isLoggedIn ? (
-            isLoading ? (
+            {isLoading ? (
               <div className="flex justify-center items-center min-h-[200px]">
                 <div className="loader"/>
                 <p className="text-lg font-semibold text-muted-foreground p-4">Loading Par Levels...</p>
               </div>
             ) : (
-              parLevelItemsArray ? (
+              parLevelItemsArray.length > 0 ? (
                 parLevelItemsArray.map((parLevelItem) => 
                 <ParDocketItem parItem={parLevelItem} />)
                 ) : (
@@ -172,14 +168,7 @@ export default function ParLevelDocket() {
                     <p className="text-lg font-semibold">You dont have any par levels.</p>
                   </div>
                 )
-            )
-          ) : (
-            <div className="flex justify-center items-center min-h-[200px]">
-              <p className="text-lg font-semibold">Login to see your par levels..</p>
-            </div>
-          )
-          }
-
+            )}
           <Separator className="my-2" />
           <ul className="grid gap-3">
             <li className="flex items-center justify-between">
@@ -202,7 +191,7 @@ export default function ParLevelDocket() {
       </CardContent>
       <CardFooter className="flex flex-row items-center border-t bg-muted/50 px-6 py-3">
         <div className="text-xs text-muted-foreground">
-          <p>Created at: {new Date(parLevelInfo ? parLevelInfo.createdAt : "Loading Creation Date...").toLocaleDateString()}</p>
+          <p>Created at: {parLevelInfo ? new Date(parLevelInfo.createdAt).toLocaleDateString() : 'Loading...'}</p>
         </div>
       </CardFooter>
     </Card>

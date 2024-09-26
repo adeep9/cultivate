@@ -1,17 +1,14 @@
 "use client";
 
 import React from 'react';
-import { Dualbar } from '@/app/components/restaurantcomponents/dualbar';
 import ParLevelForm from '@/app/components/restaurantcomponents/ParLevelForm';
+import { getCookie } from '@/lib/utils';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 const CreateParLevelPage = () => {
-    //user info from session data
-    const isLoggedIn = {
-        id: 1
-    }
+    const userId: string = getCookie('userId'); //get userId from session
+    const id = Number(userId)
 
-    //find out if user has par level already
-    //this is change the text and pass info
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
@@ -32,7 +29,7 @@ const CreateParLevelPage = () => {
         <div className="w-full max-h-full mt-4 flex flex-col md:flex-row gap-4">
           {/* Container for Orderform */}
           <div className="flex-1">
-            <ParLevelForm id={isLoggedIn.id}/>
+            <ParLevelForm id={id}/>
           </div>
         </div>
 

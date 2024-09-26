@@ -9,7 +9,9 @@ export async function POST(request: Request) {
 
     try {
         // Fetch all unique items based on the 'name', returning both 'name' and 'price'
-        const parlevel: any = await prisma.parLevel.findUnique({ where: {id} })
+        const parlevel: any = await prisma.parLevel.findMany({ where: {
+            restaurantId: id,
+        } })
         
         if (!parlevel) {
             throw new Error
@@ -44,7 +46,6 @@ export async function POST(request: Request) {
 
     } catch (error) {
         console.error('Error fetching unique items:', error); // Log the error to debug
-
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }

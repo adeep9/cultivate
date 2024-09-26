@@ -1,21 +1,20 @@
+"use client"
 // Import necessary libraries and components
 import SupplierActiveOrders from '@/app/components/suppliercomponents/SupplierActiveOrders';
-import { SupplierDualbar } from '@/app/components/suppliercomponents/SupplierDualbar';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 import SupplierOrderHeader from '@/app/components/suppliercomponents/SupplierOrderHeader';
 import SupplierPendingOrders from '@/app/components/suppliercomponents/SupplierPendingOrders';
 import SupplierOrderList from '@/app/components/suppliercomponents/SupplierOrderList';
+import { getCookie } from '@/lib/utils';
 
 const OrdersPage = () => {
-  //get usupplier info from session data
-
-  const isLoggedIn = {
-    id: 1,
-  }
+  const userId: string = getCookie('userId'); //get userId from session
+  const id = Number(userId)
 
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
-      <SupplierDualbar />
+      <Dualbar />
 
       {/* Main Content Area for All Screens */}
       <div className="orders-page flex flex-col justify-start w-full p-6">
@@ -30,19 +29,19 @@ const OrdersPage = () => {
 
         <div className="pt-4">
           <div className="w-full h-full border bg-gradient-to-br from-blue-500 via-indigo-500 to-blue-900 border-gray-300 rounded-xl p-1">
-            <SupplierOrderHeader/>
+            <SupplierOrderHeader id={id}/>
           </div>
         </div>
 
         {/* Bottom Section Below the Line (Always Visible) */}
         <div className="w-full mt-4 flex flex-col md:flex-row gap-4">
           {/* Each Bids component will take equal space in a row format */}
-          <SupplierActiveOrders className="flex-1" id={isLoggedIn.id} />
-          <SupplierPendingOrders className="flex-1" id={isLoggedIn.id} />
+          <SupplierActiveOrders className="flex-1" id={id} />
+          <SupplierPendingOrders className="flex-1" id={id} />
         </div>
 
         <div className='pt-4'>
-          <SupplierOrderList id={isLoggedIn.id}/>
+          <SupplierOrderList id={id}/>
         </div>
 
       </div>

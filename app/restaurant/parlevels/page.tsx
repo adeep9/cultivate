@@ -1,9 +1,14 @@
+"use client"
+
 import CreateParLevel from '@/app/components/restaurantcomponents/CreateParLevel';
-import { Dualbar } from '../../components/restaurantcomponents/dualbar';
 import ParLevelDocket from '@/app/components/restaurantcomponents/ParLevelDocket';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
+import { getCookie } from '@/lib/utils';
 
 
 const ParLevelPage = () => {
+  const userId: string = getCookie('userId'); //get userId from session
+  const id = Number(userId)
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">
       {/* Sidebar Component */}
@@ -22,12 +27,12 @@ const ParLevelPage = () => {
           
         <div className="pt-4">
           <div className="w-full h-full border bg-gradient-to-br from-orange-500 via-yellow-500 to-orange-900 border-gray-300 rounded-xl p-1">
-          <CreateParLevel />
+          <CreateParLevel/>
           </div>
         </div>
 
         <div className='pt-4'>
-            <ParLevelDocket />
+            <ParLevelDocket id={id} />
         </div>
       </div>
     </div>

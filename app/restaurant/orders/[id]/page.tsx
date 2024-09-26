@@ -1,10 +1,10 @@
 'use client';
 
 import Docket from '@/app/components/restaurantcomponents/docket';
-import { Dualbar } from '@/app/components/restaurantcomponents/dualbar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 const IndividualOrder = () => {
   const { id } = useParams(); // Get the order ID from the URL

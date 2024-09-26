@@ -5,15 +5,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
   SheetTrigger, // Import SheetTrigger from Sheet component
 } from "@/components/ui/sheet"; // Ensure you have the correct path for the Sheet components
-import AccountForm from "../ui/accountedit"; // Ensure you have the correct path for AccountForm
+import AccountInfo from "../ui/AccountInfo"; // Ensure you have the correct path for AccountForm
 import Link from "next/link"; 
+import { AccountData } from "./DualBar";
 
-export function SupplierNavbar() {
+export function Navbar({accountData}: {accountData: AccountData}) {
   // State to toggle navbar height
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -57,32 +55,55 @@ export function SupplierNavbar() {
                 top: "1.2rem", // Position the avatar as required
               }}
             >
-              <AvatarImage src="https://github.com/shadcn.png" />
+              {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </SheetTrigger>
 
           {/* Sheet content that will be shown when the trigger is clicked */}
           <SheetContent>
-            <SheetHeader>
-              <SheetTitle>Account Information</SheetTitle>
-              <SheetDescription>
-                This is where the account details would go.
-              </SheetDescription>
-            </SheetHeader>
             {/* Add additional content or components here */}
             <div className="p-4">
               <div>
-                <AccountForm />
+                <AccountInfo accountData={accountData} />
               </div>
             </div>
           </SheetContent>
         </Sheet>
 
         {/* Conditionally rendered div only visible when the navbar is expanded */}
-        {isExpanded && (
-          <div className="p-6 h-48 mt-20">
+        <div className="p-6 h-48 mt-20">
             {/* Menu Links */}
+        {isExpanded && (
+          accountData.accountType === "restaurant" ? (
+            <>
+              <p>
+              <Link
+                href="/restaurant/orders"
+                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
+              >
+                Orders
+              </Link>
+            </p>
+            <p>
+              <Link
+                href="/restaurant/parlevels"
+                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
+              >
+                Par Levels
+              </Link>
+            <p>
+            </p>
+              <Link
+                href="/restaurant/contact"
+                className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
+              >
+                Contact
+              </Link>
+            </p>
+            </>
+          ) : (
+            <>
             <p>
               <Link
                 href="/supplier/orders"
@@ -93,14 +114,16 @@ export function SupplierNavbar() {
             </p>
             <p>
               <Link
-                href="/suppplier/contact"
+                href="/supplier/contact"
                 className="pt-4 text-black text-2xl font-medium tracking-tight hover:underline"
               >
                 Contact
               </Link>
             </p>
-          </div>
+            </>
+          )  
         )}
+        </div>
       </div>
     </main>
   );
