@@ -7,7 +7,7 @@ import { CreateParLevel } from '@/app/components/restaurantcomponents/CreateParL
 
 
 const ParLevelPage = () => {
-  const userId: string = getCookie('userId'); //get userId from session
+  const userId: string | null = getCookie('userId'); //get userId from session
   const id = Number(userId)
   return (
     <div className="w-full h-screen bg-goated flex flex-col md:flex-row">

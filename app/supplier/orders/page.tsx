@@ -8,7 +8,7 @@ import SupplierOrderList from '@/app/components/suppliercomponents/SupplierOrder
 import { getCookie } from '@/lib/utils';
 
 const OrdersPage = () => {
-  const userId: string = getCookie('userId'); //get userId from session
+  const userId: string | null = getCookie('userId'); //get userId from session
   const id = Number(userId)
 
   return (

@@ -16,7 +16,7 @@ interface EditOrderFormProps {
 export default function EditOrderForm({id}:EditOrderFormProps) {
   // State functions
   const router = useRouter();
-  const userId: string = getCookie('userId'); //get userId from session
+  const userId: string | null = getCookie('userId'); //get userId from session
   const userNumId = Number(userId)
 
   const [step, setStep] = useState<number>(1); //control stage of form

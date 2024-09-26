@@ -30,7 +30,7 @@ export default function OrderForm() {
   const [prevLoading, setPrevLoading] = useState(false)
   const [clearLoading, setClearLoading] = useState(false)
 
-  const userId: string = getCookie('userId'); //get userId from session
+  const userId: string | null = getCookie('userId'); //get userId from session
   const id = Number(userId)
 
   // Handle the date change from the calendar

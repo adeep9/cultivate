@@ -6,7 +6,7 @@ import { getCookie } from '@/lib/utils';
 import { Dualbar } from '@/app/components/suppliercomponents/DualBar';
 
 const CreateParLevelPage = () => {
-    const userId: string = getCookie('userId'); //get userId from session
+    const userId: string | null = getCookie('userId'); //get userId from session
     const id = Number(userId)
 
   return (
