@@ -12,9 +12,21 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/login', req.url));
   }
 
+  // Check if JWT secret is defined
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    console.error('JWT secret is not defined');
+    return NextResponse.redirect(new URL('/login', req.url));
+  }
+
   try {
-    // Verify the JWT token
-    await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET!));
+    // Verify the JWT token and handle expiration
+    const { payload } = await jwtVerify(token, new TextEncoder().encode(secret));
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (payload.exp && payload.exp < currentTime) {
+      console.error('Token has expired');
+      return NextResponse.redirect(new URL('/login', req.url));
+    }
 
     // Define route access based on userType
     const urlPath = req.nextUrl.pathname;
@@ -30,6 +42,7 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect(new URL('/restaurant/orders', req.url)); // Redirect unauthorized access
       }
     } else {
+      console.error('Unknown user type:', userType);
       return NextResponse.redirect(new URL('/login', req.url)); // Redirect for unknown user types
     }
 
@@ -44,3 +57,4 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: ['/supplier/:path*', '/restaurant/:path*'], // Adjust based on your routes
 };
+

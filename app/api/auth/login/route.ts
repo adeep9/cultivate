@@ -14,8 +14,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    // Check if the user exists in the restaurant table
-    // If not found in the restaurant table, check the supplier table
+    // Check if the user exists in the restaurant table or supplier table
     let user = await prisma.restaurant.findUnique({ where: { email } });
     if (!user) {
       user = await prisma.supplier.findUnique({ where: { email } });
@@ -25,43 +24,43 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    //Check if password is valid
+    // Check if password is valid
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
     }
 
-    //create cookies token (that never expires)
-    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET!, {});
+    // Create JWT token with expiration
+    const token = jwt.sign({ id: user.id, email: user.email, userType: supplierType ? "supplier" : "restaurant" }, process.env.JWT_SECRET!, {
+      expiresIn: '2h', // Setting expiration for 2 hours
+    });
 
     const response = NextResponse.json({ 
       success: true,
       supplierType: supplierType
     });
 
-    //Set user ID cookie
+    // Set user ID cookie
     response.cookies.set('userId', String(user.id), {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production', // Use secure flag in production
+      path: '/',
     });
 
-    //Set token cookie
+    // Set token cookie
     response.cookies.set('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // Use secure flag in production
+      path: '/',
     });
 
-    //Set user type cookie
-    let userType="restaurant"
-    if (supplierType) {
-      userType = "supplier"
-    }
-    response.cookies.set('userType', String(userType), {
+    // Set user type cookie
+    response.cookies.set('userType', String(supplierType ? "supplier" : "restaurant"), {
       httpOnly: false,
       secure: process.env.NODE_ENV === 'production', // Use secure flag in production
+      path: '/',
     });
 
-    console.log("USER TYPE FROM ROUTE:", userType)
     return response;
 
   } catch (error) {
