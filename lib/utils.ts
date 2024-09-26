@@ -6,19 +6,20 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // Utility function to get a cookie value by its name
-// Utility function to get a cookie value by its name
-export function getCookie(name: string): string {
-  // Check if we are in a browser environment
+import { cookies } from 'next/headers'; // For server-side cookie access in Next.js
+
+export function getCookie(name: string): string | null {
+  // Check if we are in a server-side environment
   if (typeof document === 'undefined') {
-    console.warn('getCookie called in a non-browser environment; returning null.');
-    return ""; // Return null if document is not defined (e.g., server-side)
+    // Server-side, use 'next/headers' to access cookies
+    const serverCookies = cookies();
+    const cookie = serverCookies.get(name);
+    return cookie ? cookie.value : null;
   }
 
-  // Split cookies into an array
-  const cookies = document.cookie.split('; ');
-  // Find the cookie with the given name
-  const cookie = cookies.find(cookie => cookie.startsWith(`${name}=`));
-
-  // Return the cookie value or null if not found
-  return cookie ? decodeURIComponent(cookie.split('=')[1]) : "";
+  // Client-side, use 'document.cookie'
+  const cookiesArray = document.cookie.split('; ');
+  const cookie = cookiesArray.find((cookie) => cookie.startsWith(`${name}=`));
+  return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
 }
+
